@@ -2,4 +2,11 @@ SFC(Single File Component) : Bütün componentleri bağımısz olarak kendilerin
 vue dosyalarına Single File Component Denir
 
 SOC(Seperation Of Concerns) : İlgilenilen konuların ayrıştırlması. üç farklı bölümün tek dostada olması ve o dosyanın
-tek işlevde olması olayo
+tek işlevde olması olayı
+
+Bootstrapi kurma : npm install bootstrap
+
+Kısayollar
+-vb yazınca vbase e tıklayınca single page template oluşturur
+Not : vbase-3-ts-setup typescript ve composition api ile şablon oluşturur
+dipnot : vue vscode snippet eklentisi olması gerekir
