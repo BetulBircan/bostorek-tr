@@ -13,6 +13,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
+      //vue: 'vue/dist/vue.esm-bundler'  //Burada bunu yazmamızın sebepi main.js de createAPPile vue insatncı oluşturukn içindeki template i sayfaya yansıtması ama biz bunu böyle kullanmıcaz şimdilik
     }
   }
 })

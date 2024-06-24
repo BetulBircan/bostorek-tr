@@ -1,0 +1,5 @@
+SFC(Single File Component) : Bütün componentleri bağımısz olarak kendilerina ait template script style olan 
+vue dosyalarına Single File Component Denir
+
+SOC(Seperation Of Concerns) : İlgilenilen konuların ayrıştırlması. üç farklı bölümün tek dostada olması ve o dosyanın
+tek işlevde olması olayo
