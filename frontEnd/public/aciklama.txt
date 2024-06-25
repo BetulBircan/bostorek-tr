@@ -6,6 +6,8 @@ tek işlevde olması olayı
 
 Bootstrapi kurma : npm install bootstrap
 
+İnterPolirion ( {{}}) : Burada data kısmında tanımlanan değişkenler gösterilir javascript kodlexpressionları da kullanılabilir.
+
 Kısayollar
 -vb yazınca vbase e tıklayınca single page template oluşturur
 Not : vbase-3-ts-setup typescript ve composition api ile şablon oluşturur

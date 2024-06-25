@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-md custom-nav">
     <div class="container">
-        <a href="#" class="navbar-brand">Bostorek</a>
+        <a href="#" class="navbar-brand">{{isUpperCase ? brandName.toUpperCase() : brandName}}</a>
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a href="#" class="nav-link">Home</a>
@@ -28,7 +28,10 @@
         name : 'NavBar',
         data() {
             return {
-                
+                brandName : "Bostorek",
+                // isUpperCase : true,
+                isUpperCase : false
+
             }
         },
     }
