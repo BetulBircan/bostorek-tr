@@ -6,6 +6,9 @@ tek işlevde olması olayı
 
 Bootstrapi kurma : npm install bootstrap
 
+vue-router kurma : npm install vue-router@4
+routering : sayfalar arası yönlendirme. yönlendirilecek sayfakların komponentleri views klasöründe oluşturulur.
+
 İnterPolirion ( {{}}) : Burada data kısmında tanımlanan değişkenler gösterilir javascript kodlexpressionları da kullanılabilir.
 
 Kısayollar

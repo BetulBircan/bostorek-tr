@@ -1,8 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { createApp } from "vue";
 import App from "@/App.vue";
+import router from "@/router/index.js";
 
 const app = createApp(App);
+app.use(router);
 app.mount("#app");
 
 //Bir vue instance ı oluşturacak yani vue uygulamasının özelliklerini ve davranışlarını gösteren bir nesneyi İÇERECEK

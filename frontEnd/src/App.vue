@@ -1,13 +1,13 @@
 <template>
     <!-- html şablon kısmı -->
    <NavBar/>
-   <!-- <nav-bar /> -->
+    <!-- <nav-bar /> -->
     <!-- <NavBar></NavBar> -->
-     <!-- <nav-bar></nav-bar> şekilde kullanılabilir -->
-      <p>{{ message }}</p>
-      <button @click="count++">Count</button>
-      <p>{{count}}</p>
-      <p v-if="isVisible">Burası Görünecek</p>
+    <!-- <nav-bar></nav-bar> şekilde kullanılabilir -->
+    
+     <!-- RouterView ı import etmemize gerek yok çünkü main.js de app.use(router) diyerek global olarak tanımlamış olduk heryerden erişebiliriz. url ler için yer tutucu -->
+   <RouterView />
+  
 </template>
 
 <script>
@@ -27,10 +27,7 @@
         data() {
             return {
                 // data içeriği : verilerin değişkenlerin başlangıç değerleri
-                message : "Merhaba",
-                count : 0,
-                // isVisible : true
-                isVisible : false
+               
             }
         },
        
