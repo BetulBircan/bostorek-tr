@@ -1,22 +1,22 @@
 <template>
   <nav class="navbar navbar-expand-md custom-nav">
     <div class="container">
-        <a href="#" class="navbar-brand">{{isUpperCase ? brandName.toUpperCase() : brandName}}</a>
+        <RouterLink class="navbar-brand" :to="{name:'home'}">{{isUpperCase ? brandName.toUpperCase() : brandName}}</RouterLink>
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a href="#" class="nav-link">Home</a>
+                <RouterLink class="nav-link" :to="{name : 'home'}">Home</RouterLink>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">Books</a>
+                <RouterLink class="nav-link" :to="{name : 'books'}">Books</RouterLink>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">Contact Us</a>
+                <RouterLink class="nav-link" :to="{name : 'contact'}">Contact Us</RouterLink>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">Login</a>
+                <RouterLink class="nav-link" :to="{name : 'login'}">Login</RouterLink>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">Register</a>
+                <RouterLink class="nav-link" :to="{name : 'register'}">Register</RouterLink>
             </li>
         </ul>
     </div>
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { RouterLink } from 'vue-router';
+
     export default {
         name : 'NavBar',
         data() {
@@ -53,8 +55,16 @@
 }
 
 .nav-link {
-    padding: 10px 25px;
+    padding: 10px 15px !important;
     color: #fff;
     text-align: center;
+}
+
+.nav-link:hover {
+    color:#44b89d;
+}
+
+.active-link {
+    color : #44b89d;
 }
 </style>
