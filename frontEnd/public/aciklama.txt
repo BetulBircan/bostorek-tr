@@ -26,3 +26,5 @@ gezinmemizi sağlar.
 directive : vue ya özel komutlardır.talimatlardır. benim kendi data ya da değişkendeki veriyi html attribute una bağlamak istersek
 v-bind directive ini kullanırız.
 v-bind:bağlamak . v-bind a sadecedeğişken değil basit javascript kodlarını da yazabiliriz
+
+Props : Parent component ten child component a bir veri iletişim methodudur.
