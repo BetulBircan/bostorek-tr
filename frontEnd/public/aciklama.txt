@@ -28,3 +28,11 @@ v-bind directive ini kullanırız.
 v-bind:bağlamak . v-bind a sadecedeğişken değil basit javascript kodlarını da yazabiliriz
 
 Props : Parent component ten child component a bir veri iletişim methodudur.
+
+v-for : Döngü kurmak için kullanılır .
+Kullanımı : mesela books değişkeni bir dizi döngüde v-for="book in books" olarak döner.
+v-for kullanıldığı zaman mutlaka :key ekleriz. Key değerinin uniq olması laızm. Bu şu ieş yarar :  herhangi bir şekilde 
+bu elemanların herhangi birinde bir değişiklik yapıldığı zaman vue nun o değişiklik yapan elemanı performanslı bir şekilde
+yakalamasını sağlar.
+
+ONE DAY DATA FLOW : PARENT TAN CHİLD A PROPLA BİLGİ AKTARMA İŞLEMİ. child component a prop a değer atanamaz program hata verir. sadece readonly dir proplar.
