@@ -36,3 +36,8 @@ bu elemanların herhangi birinde bir değişiklik yapıldığı zaman vue nun o 
 yakalamasını sağlar.
 
 ONE DAY DATA FLOW : PARENT TAN CHİLD A PROPLA BİLGİ AKTARMA İŞLEMİ. child component a prop a değer atanamaz program hata verir. sadece readonly dir proplar.
+
+computed : data propundan ya da componentin farklı özelliklerinden türetilmiş , hesaplanmış verilerdir.
+
+javascript kısmında değişken kullanırken this kelimesini kullanırız ama template kısmında kullanmayız. Çünkü vue otomatik ola
+rak data, computed properties ve methodları template in içerisine otomatik olarak bağlar, bind eder..
