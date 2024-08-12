@@ -41,3 +41,15 @@ computed : data propundan ya da componentin farklı özelliklerinden türetilmi�
 
 javascript kısmında değişken kullanırken this kelimesini kullanırız ama template kısmında kullanmayız. Çünkü vue otomatik ola
 rak data, computed properties ve methodları template in içerisine otomatik olarak bağlar, bind eder..
+
+methods: istediğimiz işlemi yapmak için fonksiyonları methods property in içerisine yazarız.
+vue templetinde kullanabilmek için de örneğin bu projede books sayfasında bir sonraki sayfaya geçmek istediğimiz >> butonuna
+bastığımızda çalışacak fonksiyonu kullanmak için v-on:click bind directive ini kullanırız. kısaca @click ile de yazılabilir.
+
+EMİT : CHİLD COMPONENTİNDEN PARENT COMPONENT E GÖNDERİLEN BİR BİLDİRİM İŞLEMİ OLARAK DÜŞÜNEBİLİRİZ.
+this.$emit olarak yazılır javascriptte. $ ın sebebi vuejs in kendine has olan herhangi bir methodunu çalıştırdığımız zaman
+ayırt etmek için kullanılan bir yöntem. örneğin biz elimizle emit() methodu yazdığımızda birbirine karışmaması için kullanılır.
+
+:class="{'active': currentPage === page}" burada bootstrap class ları aktif olarak kullanabildiğimiz gibi kendimiz custom
+classlarımızı da yazarak kullanabiliriz.active yazanın yerine
+

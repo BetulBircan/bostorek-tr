@@ -9,8 +9,8 @@
                 text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit, beatae cumque nisi laborum harum ipsam!" />
             <!-- <BookList :books="books"/> -->
             <BookList :books="paginetedBooks"/>    <!-- sayfa bazlı kitap sayısını gönderiyoruz -->
-           
-            <Pagination :currentPage="currentPage" :totalPages="totalPages"/>
+            <!-- @page-changed yazmamızın sebebi child component e emit ile bilgi aktarmak için kullanılır child dakie mit in adı kullanıldı -->
+            <Pagination :currentPage="currentPage" :totalPages="totalPages" @page-changed="updatePage"/>
 
         </div>
     </section>
@@ -51,7 +51,12 @@ export default {
             return this.books.slice(startIndex, endIndex);
         }
         
-    }
+    },
+    methods: {
+        updatePage(page) {
+            this.currentPage = page;
+        }
+    }   
 }
 </script>
 
