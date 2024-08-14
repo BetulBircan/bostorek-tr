@@ -3,7 +3,9 @@
         <div class="container">
             <SectionHeader :title="book.name"
                 :text="book.author" />
-            <button>Back</button>
+                <font-awesome-icon icon="arrow-left" size="2xl" class="mb-2 cursor-pointer" @click="goToBackBooks"/>
+                <!-- <font-awesome-icon icon="arrow-left" @click="$router.go(-1)" /> -->
+            <!-- <button>Back</button> -->
             <div class="row mb-4">
                 <div class="col-lg-6">
                     <img class="card-img-top" src="../../template/images/b_detail.jpg" alt="Book Image"></img>
@@ -38,8 +40,8 @@
                                 <div class="d-flex justify-content-between">
                                     <p class="fw-bold fst-italic">John Doe</p>
                                     <div class="d-flex align-items-center">
-                                        <p>Upvote</p>
-                                        <p class="ps-2" ><strong>8</strong></p>
+                                        <font-awesome-icon icon="fa-regular fa-thumbs-up" />
+                                        <p class="ps-2 mb-0" ><strong>8</strong></p>
                                     </div>
                                 </div>
                             </div>
@@ -50,8 +52,8 @@
                                 <div class="d-flex justify-content-between">
                                     <p class="fw-bold fst-italic">John Doe</p>
                                     <div class="d-flex align-items-center">
-                                        <p>Upvote</p>
-                                        <p class="ps-2" ><strong>8</strong></p>
+                                        <font-awesome-icon icon="fa-regular fa-thumbs-up" />
+                                        <p class="ps-2 mb-0" ><strong>8</strong></p>
                                     </div>
                                 </div>
                             </div>
@@ -62,8 +64,8 @@
                                 <div class="d-flex justify-content-between">
                                     <p class="fw-bold fst-italic">John Doe</p>
                                     <div class="d-flex align-items-center">
-                                        <p>Upvote</p>
-                                        <p class="ps-2" ><strong>8</strong></p>
+                                        <font-awesome-icon icon="fa-regular fa-thumbs-up" />
+                                        <p class="ps-2 mb-0" ><strong>8</strong></p>
                                     </div>
                                 </div>
                             </div>
@@ -74,8 +76,8 @@
                                 <div class="d-flex justify-content-between">
                                     <p class="fw-bold fst-italic">John Doe</p>
                                     <div class="d-flex align-items-center">
-                                        <p>Upvote</p>
-                                        <p class="ps-2" ><strong>8</strong></p>
+                                        <font-awesome-icon icon="fa-regular fa-thumbs-up" />
+                                        <p class="ps-2 mb-0" ><strong>8</strong></p>
                                     </div>
                                 </div>
                             </div>
@@ -86,8 +88,8 @@
                                 <div class="d-flex justify-content-between">
                                     <p class="fw-bold fst-italic">John Doe</p>
                                     <div class="d-flex align-items-center">
-                                        <p>Upvote</p>
-                                        <p class="ps-2" ><strong>8</strong></p>
+                                        <font-awesome-icon icon="fa-regular fa-thumbs-up" />
+                                        <p class="ps-2 mb-0" ><strong>8</strong></p>
                                     </div>
                                 </div>
                             </div>
@@ -98,8 +100,8 @@
                                 <div class="d-flex justify-content-between">
                                     <p class="fw-bold fst-italic">John Doe</p>
                                     <div class="d-flex align-items-center">
-                                        <p>Upvote</p>
-                                        <p class="ps-2" ><strong>8</strong></p>
+                                        <font-awesome-icon icon="fa-regular fa-thumbs-up" />
+                                        <p class="ps-2 mb-0" ><strong>8</strong></p>
                                     </div>
                                 </div>
                             </div>
@@ -137,8 +139,14 @@ export default {
                          */
         const bookId = this.$route.params.id;
         this.book = books.find(book => book.id === parseInt(bookId));
-        console.log(this.book,"book");
-        
+    
+    },
+    methods: {
+        goToBackBooks() {
+            this.$router.push({name : "books"}); //router.push ile yönlendirme yapılır. name i books olan route a yönlendirme yapılır.
+            
+            
+        }
     }
 }
 </script>
