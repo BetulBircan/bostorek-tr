@@ -53,3 +53,8 @@ ayırt etmek için kullanılan bir yöntem. örneğin biz elimizle emit() method
 :class="{'active': currentPage === page}" burada bootstrap class ları aktif olarak kullanabildiğimiz gibi kendimiz custom
 classlarımızı da yazarak kullanabiliriz.active yazanın yerine
 
+Life Cycle methods-YAŞAM DÖNGÜSÜ METHODLARI
+COMPONENTLARIN DOM İÇERİSİNDE OLUŞTURULUP SONRASINDA DA KALDIRILMASI ARASINDA GEÇEN METHODLARDIR.
+created : template daha compiler edilmeden yani componentteki html içerikleri daha dom içerisine yerleştirilmeden biz otomatik
+bir method çalışıtrıyoruz o da created dır.
+
