@@ -1,8 +1,8 @@
 <template>
-   <section>
-    <div class="container">
+   <section class="full-section-height">
+    <div class="container" >
         <!-- <form class="mt-5" @submit="submitForm"> -->
-            <form class="mt-5" @submit.prevent="submitForm">   <!-- submit.prevent diyerek submit edildiğinde sayfa yenilenme işlemi yapmaz. -->
+            <form  @submit.prevent="submitForm">   <!-- submit.prevent diyerek submit edildiğinde sayfa yenilenme işlemi yapmaz. -->
           <div class="row justify-content-center">
             <div class="col-md-6 col-8 mb-3">
 
@@ -165,6 +165,7 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+
 
 </style>

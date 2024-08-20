@@ -41,7 +41,7 @@ import { RouterLink } from 'vue-router';
 
 <style scoped>
 .custom-nav {
-    background-color: #063547;
+    background-color: var(--primary-color);
     /*sağdan soldan 15px iç boşluk yukafıdan aşağıya 0px boşluk */
     padding: 15px 0px; 
 }

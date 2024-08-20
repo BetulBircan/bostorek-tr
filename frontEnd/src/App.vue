@@ -7,6 +7,7 @@
     
      <!-- RouterView ı import etmemize gerek yok çünkü main.js de app.use(router) diyerek global olarak tanımlamış olduk heryerden erişebiliriz. url ler için yer tutucu -->
    <RouterView />
+    <TheFooter/>
   
 </template>
 
@@ -15,6 +16,7 @@
 
     //reactivity özelliği : bir şeye tepki vermek
     import NavBar from "@/components/NavBar.vue"
+    import TheFooter from "@/components/TheFooter.vue";
 
     //options api 
     export default {
@@ -22,7 +24,8 @@
         name : 'App',
         components : {
             // eklenecek componentlar
-            NavBar
+            NavBar,
+            TheFooter
         },
         data() {
             return {
@@ -35,14 +38,5 @@
 </script>
 
 <style>
-    /* css kısmı */
-    @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@200..1000&display=swap');
-    
-    html, body {
-        font-family: 'Mulish', sans-serif;
-    }
-    
-    a {
-        text-decoration: none;
-    }
+  
 </style>
