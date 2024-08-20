@@ -1,7 +1,8 @@
 <template>
    <section>
     <div class="container">
-        <form class="mt-5">
+        <!-- <form class="mt-5" @submit="submitForm"> -->
+            <form class="mt-5" @submit.prevent="submitForm">   <!-- submit.prevent diyerek submit edildiğinde sayfa yenilenme işlemi yapmaz. -->
           <div class="row justify-content-center">
             <div class="col-md-6 col-8 mb-3">
 
@@ -24,7 +25,7 @@
               <!-- <input type="text" class="form-control" id="username" name="username" :value="formData.username" @input="updateUsername" required
                 > Bu kullanıcının inputa girdiği değeri alması için uzun yol kullanılmış hali. kısaca v-model bind ını kullanabiliriz -->
 
-              <input type="text" class="form-control" id="username" name="username" v-model="formData.username"  required>
+              <input type="text" class="form-control" id="username" name="username" v-model.trim="formData.username"  required>
             </div>
           </div>
 
@@ -32,7 +33,7 @@
             <!-- Email Field (Medium and Larger Screens) -->
             <div class="col-md-6 col-8 mb-3">
               <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" name="email" v-model="formData.email" required>
+              <input type="email" class="form-control" id="email" name="email" v-model.trim="formData.email" required>
             </div>
           </div>
 
@@ -40,21 +41,21 @@
           <div class="row justify-content-center">
             <div class="col-md-6 col-8 mb-3">
               <label for="password" class="form-label">Password</label>
-              <input type="password" class="form-control" id="password" name="password" v-model="formData.password" required>
+              <input type="password" class="form-control" id="password" name="password" v-model.trim="formData.password" required>
             </div>
           </div>
 
           <!-- Gender Field -->
-          <div class="row justify-content-center">
+          <!-- <div class="row justify-content-center">
             <div class="col-md-6 col-8 mb-3">
               <h5>Gender</h5>
-              <div class="form-check">
+              <div class="form-check"> -->
                 <!--
                  checked özellği radiobutton un seçili olup olmadığına bakar 
                  changed eventi : radiobutton seçildiğinde tetiklenir. hangi radiobutton seçildiğini anlamak için value attribute kullanılır.
                  v-model le hangi gender ı seçiyorsan o gelitirilir.
                   -->
-                <input class="form-check-input" type="radio" name="gender" value='male' id="male" v-model="formData.gender" >
+                <!-- <input class="form-check-input" type="radio" name="gender" value='male' id="male" v-model="formData.gender" >
                 <label class="form-check-label" for="male">
                   Male
                 </label>
@@ -66,48 +67,49 @@
                 </label>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <!-- Age Field -->
-          <div class="row justify-content-center">
+          <!-- <div class="row justify-content-center">
             <div class="col-md-6 col-8 mb-3">
-              <label for="age" class="form-label">Age:</label>
-              <input type="number" class="form-control" id="age" required>
+              <label for="age" class="form-label">Age:</label> -->
+              <!-- <input type="number" class="form-control" id="age" v-model="formData.age" required> -->
+              <!-- <input class="form-control" id="age" v-model.number="formData.age" required>
             </div>
-          </div>
+          </div> -->
 
           <!-- Programming Field -->
-          <div class="row justify-content-center">
+          <!-- <div class="row justify-content-center">
             <div class="col-md-6 col-8 mb-3">
               <h5>Which Programming Language(s) you know?</h5>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="java" id="java">
+                <input class="form-check-input" type="checkbox" value="java" id="java" v-model="formData.languages">
                 <label class="form-check-label" for="java">
                   Java
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="c++" id="c++">
+                <input class="form-check-input" type="checkbox" value="c++" id="c++" v-model="formData.languages">
                 <label class="form-check-label" for="c++">
                   C++
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="python" id="python">
+                <input class="form-check-input" type="checkbox" value="python" id="python" v-model="formData.languages">
                 <label class="form-check-label" for="python">
                   Python
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="rust" id="rust">
+                <input class="form-check-input" type="checkbox" value="rust" id="rust" v-model="formData.languages">
                 <label class="form-check-label" for="rust">
                   Rust
                 </label>
               </div>
             </div>
-          </div>
+          </div> -->
 
-
+    
           <!-- Submit Button -->
           <div class="row justify-content-center">
             <div class="col-md-6 col-8 mb-3">
@@ -128,7 +130,9 @@
                     username : "",
                     email : "",
                     password : "",
-                    gender : ""
+                    // gender : "",
+                    // age : null,
+                    // languages : []
                 }
             }
         },
@@ -148,8 +152,14 @@
                 
             // },
 
-            updateGender(newGender) {
-                this.formData.gender = newGender;
+            // updateGender(newGender) {
+            //     this.formData.gender = newGender;
+            // },
+            submitForm() {
+                //submitForm(event) olarak method parametre alır
+                //event.preventDefault(); //submit edildiğinde sayfanın yenilenmesini engeller.
+
+                console.log(this.formData,"FORM DATA");
             }
         }
     }

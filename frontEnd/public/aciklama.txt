@@ -59,16 +59,30 @@ created : template daha compiler edilmeden yani componentteki html içerikleri d
 bir method çalıştırıyoruz o da created dır.
 
  <!-- for=username aynı name e sahip  field ına ait olduğunu gösterir. input elementindeki is ile
-                 labeldaki for birbiryle örtüşür.-->
-              <label for="username" class="form-label">Username</label>
+    labeldaki for birbiryle örtüşür.-->
+<label for="username" class="form-label">Username</label>
 
-              <!-- 
-              type="input un tipi text",
-              class="form-control" bootstrapin input elementine verilen bir class
-                id="username" input elementinin id'si uniq bir tanimlayici
-                name=örneğin formu doldurup gönderdiğimizde hangi input alanını doldurduğumuzu gösterir.
-                required=bu input alanınınzorunlu  bir alan olduğunu gösterir.
-              -->
-              <input type="text" class="form-control" id="username" name="username"  required>
+<!-- 
+type="input un tipi text",
+class="form-control" bootstrapin input elementine verilen bir class
+id="username" input elementinin id'si uniq bir tanimlayici
+name=örneğin formu doldurup gönderdiğimizde hangi input alanını doldurduğumuzu gösterir.
+required=bu input alanınınzorunlu  bir alan olduğunu gösterir.
+-->
+<input type="text" class="form-control" id="username" name="username"  required>
+
+Modifiers : v-model modifiers
+
+v-model.number = arkada oarsefloat metodunu çalışıtırarak string bir ifadeyi float a çevirir ve sayı olarak alır.
+ama input kısmına harf yazmasına izin verir.
+
+v-model.lazy : arka planda çalışan input eventini change event e çevirir. yani her bir karaker girdiğinde değil inputun
+odaktan çıkınca inputa girilen değeri alır ve günceller.
+
+v-model.trim = inputa girilen boşlukları kaldırır. inputta boşluk kullanmasına izin vermesine rağmen girilen değeri 
+boşluklar olmayacak şekilde günceller.
+
+
+
 
 
