@@ -1,0 +1,57 @@
+npm init komutu ile yeni bir node projesi oluşturulur.
+
+npm init sonrası çıkan sorular:
+package name : (backend)  (enter a basılır )
+version : (1.0.0) (enter a basılır)
+description : (enter a basılır yani boş geçilir)
+entry point: (index.js) (server.js olarak yazılıp enter a basılır)
+test command : 
+git repository :
+keywords : 
+author : Betül Bircan
+license : (ISC) (enter a basılır yani boş geçilir)
+
+
+npm init dedikten sonra sorulan sorular ve verilen cevaplar sonucu oluşan obje 
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Betül Bircan",
+  "license": "ISC"
+}
+
+Is this OK? (yes) YES DİYEREK PACKAGE.JSON DOSYASI OLUŞTURULUR backend klasörüne
+package.json dosyasında kendi npm paketlerimizi kullanabiliriz.
+buradaki sunucuyu çalıştırmak için server.js dosyası oluşturulup backend klasöründeterminalde node server.js komutu kullanılır
+yüklenilecek npm paketlerini yüklerken repository de yer kaplamaması için .gitignore dosyası oluşturulur.
+
+express.js node.js de web e api uygulamaları için kullanılan popüler bir uygulama kütüphanesi frameworkdür.
+
+sunucu dosyasında bir değişiklik yaptığımızda otomatik olarak güncelleyip yansıtacak olan paket nodemon dur.
+
+package.json da scripts kısmı
+
+  "scripts": {
+    // "test": "echo \"Error: no test specified\" && exit 1" bu iptal edilir
+    "start": "node server.js" olarak yazılır. bu işlem npm run srart dediğimizde sunucuyu kolaylıkla çalıştırmamıza imkan sağlar
+    "start": "node --watch  server.js" yazdığımız zaman server.js dosyasında herhangi bir değişiklik yaptığında sunucu yu 
+    kapatmamıza gerek kalmadan kendi kendşne restart eder. yani node 18 sonrası watch a implemet edilmiştir
+    ama --watch değil de nodemon paketini indirmemizin sebebi --watch kısmı hala deneyim aşamasında o yüzden nodemon paketi yüklenir
+    ve "start": "node --watch  server.js" değil 
+    "start": "nodemon  server.js" olarak güncellenir
+   
+  },
+
+   http client olarak thunderclient eklentisinden yararlanırız
+   api tarafındaki endpoint isteklerini thunderClient üzerinden test ediyoruz.
+
+   package.json da type kısmı:
+   varsayılan olarak common.js dir bir paketi veya modülü eklemek için 
+   const express = require('express'); kullanırız common.js de yani ecmascript 5 versiyonunda
+   "type": "module", dediğimizde ise paket veya dosya eklemek istediğimizde import ile etmemizi sağlar ecmascript6 da.
+
