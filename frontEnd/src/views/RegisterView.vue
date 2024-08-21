@@ -159,7 +159,7 @@
                 //submitForm(event) olarak method parametre alır
                 //event.preventDefault(); //submit edildiğinde sayfanın yenilenmesini engeller.
 
-                console.log(this.formData,"FORM DATA");
+                console.log(this.formData,"REGİSTERFORM DATA");
             }
         }
     }

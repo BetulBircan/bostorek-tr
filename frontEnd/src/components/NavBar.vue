@@ -61,10 +61,10 @@ import { RouterLink } from 'vue-router';
 }
 
 .nav-link:hover {
-    color:#44b89d;
+    color: var(--secondary-color)
 }
 
 .active-link {
-    color : #44b89d;
+    color : var(--secondary-color);
 }
 </style>

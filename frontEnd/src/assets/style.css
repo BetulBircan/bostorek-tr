@@ -1,10 +1,13 @@
   /* css kısmı */
   @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@200..1000&display=swap');
 
+  /* root variables */
   :root {
     --primary-color: #063547;
-}
+    --secondary-color:#44b89d;
+  }
     
+  /* general settings */
   html, body {
       font-family: 'Mulish', sans-serif;
   }
@@ -13,6 +16,7 @@
       text-decoration: none;
   }
 
+  /* custom settings */
   .full-section-height {
   min-height : calc(100vh - 130px);
   display: flex;
