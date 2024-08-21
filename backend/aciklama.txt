@@ -55,3 +55,13 @@ package.json da scripts kısmı
    const express = require('express'); kullanırız common.js de yani ecmascript 5 versiyonunda
    "type": "module", dediğimizde ise paket veya dosya eklemek istediğimizde import ile etmemizi sağlar ecmascript6 da.
 
+   Router
+   express.js deki uygulamalarımzın belirli bir http isteğine cevap vermek için kullanılan bir yönlendirme mekanizmasıdır.
+
+   routerları eklememizin sebebi mvc yapısına gör euyarlamak . ModelViewController
+   View kısmı frontend kısmı
+   contoller sa router larda yapılan yönlendirme işlemleri örneğinmyeni oluşturduğımız bookController
+   Model: veritabanında oluşturacağımız data yapısını modellarda oluşturulan schema ile belirleriz.
+
+
+

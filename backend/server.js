@@ -5,15 +5,14 @@
 
 //ES6
 import express from 'express';
+import bookRoute from './routes/bookRoute.js';
 const app = express();
 const port = 4000;
 
 //Burada express.js in bize sağladığı en büyük kolaylık gelen bir isteğe(request) karşı kolaylıkla cevap verebilmemizdir.(response)
 
 //GET request
-app.get('/', (req, res) => {
-    res.send('Hello oooooooo');
-});
+app.use('/api/v1/books',bookRoute);
 
 app.listen(port, () => {
     console.log(`Server is listening port : ${port}`);
