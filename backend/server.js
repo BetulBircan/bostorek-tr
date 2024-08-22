@@ -6,6 +6,8 @@
 //ES6
 import express from 'express';
 import bookRoute from './routes/bookRoute.js';
+import connectDB from './config/db.js';
+
 const app = express();
 const port = 4000;
 
@@ -14,8 +16,16 @@ const port = 4000;
 //GET request
 app.use('/api/v1/books',bookRoute);
 
-app.listen(port, () => {
-    console.log(`Server is listening port : ${port}`);
-});
+try {
+    await connectDB();
+    app.listen(port, () => {
+        console.log(`Server is listening port : ${port}`);
+    });
+    
+} catch (error) {
+    process.exit(1); //process.exit(1) ile uygulamayı bir hata ile karşılaştığında durdurur.
+}
+
+
 
 

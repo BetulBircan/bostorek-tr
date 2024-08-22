@@ -63,5 +63,11 @@ package.json da scripts kısmı
    contoller sa router larda yapılan yönlendirme işlemleri örneğinmyeni oluşturduğımız bookController
    Model: veritabanında oluşturacağımız data yapısını modellarda oluşturulan schema ile belirleriz.
 
+   dotenv : bizm eniroment variable yani çevre değişkenleri oluşturmamıza yarar. password lerde veri açık açık yazılmaması güvenlik
+   zaafiyeti oluşturmaması için dotenv den yararlanırız.
+
+   mongoose : object modelleme tool u yani nesne modelleme aracı. veri yapalrı ve schema oluşturmaya yarar.
+
+
 
 

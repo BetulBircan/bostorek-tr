@@ -6,3 +6,4 @@ import * as bookController from '../controllers/bookController.js'; //burada bbo
 router.get('/', bookController.getAllBooks); //burada /api/v1/books/ isteği geldiğinde bookController dosyasındaki getAllBooks methodunu çalıştırırız.
 
 export default router;
+
