@@ -68,6 +68,12 @@ package.json da scripts kısmı
 
    mongoose : object modelleme tool u yani nesne modelleme aracı. veri yapalrı ve schema oluşturmaya yarar.
 
+   Schema : mongofb collectionlarında saklanacak dökümanların yapısını tanımlamamızı sağlar.
+
+   Collection : tablo benzeri yapı
+   Döküman : tablonun içerisindeki satırlar. Obje şeklindedir
+
+
 
 
 
