@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 //Schema : dökümanların yapısını tamamlıyoruz.
 const bookSchema = new mongoose.Schema(
     {
-        titlle : {
+        title : {
             type: String,
             required: true,
             
@@ -21,6 +21,7 @@ const bookSchema = new mongoose.Schema(
         },
         rating : {
             type: Number,
+            required : true,
             min : 0,
             max : 10
         }

@@ -13,6 +13,9 @@ const port = 4000;
 
 //Burada express.js in bize sağladığı en büyük kolaylık gelen bir isteğe(request) karşı kolaylıkla cevap verebilmemizdir.(response)
 
+//Middleware
+app.use(express.json()); //express.json() ile gelen requestin body kısmını json a çeviririz.
+
 //GET request
 app.use('/api/v1/books',bookRoute);
 
