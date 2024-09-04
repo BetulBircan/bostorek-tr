@@ -29,6 +29,6 @@ const bookSchema = new mongoose.Schema(
    {timestamps : true} //bu opsiyon her dökümanımımızda iki adet ekleyecek otomatik olarak. bu iki alan da createdAtve updatedAt
 );
 
-const Book = mongoose.model('Book',bookSchema); //model oluşturduk ve Book adında bir model oluşturduk.mongodb collection iel etkileş,m kurmamızı sağlar
+const Book = mongoose.model('Book',bookSchema); //model oluşturduk ve Book adında bir model oluşturduk.mongodb collection ile etkileşim kurmamızı sağlar
 
 export default Book;

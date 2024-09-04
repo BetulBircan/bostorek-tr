@@ -73,6 +73,8 @@ package.json da scripts kısmı
    Collection : tablo benzeri yapı
    Döküman : tablonun içerisindeki satırlar. Obje şeklindedir
 
+   utilities : controllerda tekrarlanan koşullar fonksiyonlar vs için tek bir yerden erişebilmesi için oluşturulur.
+
 
 
 

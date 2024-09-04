@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
 import Book from "../models/Book.js";
+import { isValidObjectId, findDocumentById } from "../utils/index.js";
 
 //Tüm kitapları getirme
 const getAllBooks = async (req, res) => {
@@ -22,22 +22,13 @@ const getABook = async (req, res) => {
      //console.log("Params : ", req.params); //burada gelen requestin params kısmını yazdırırız. ve url deki parametreleri alırız.
      const { id } = req.params; //url deki parametreleri alırız.
         
-     if(!mongoose.Types.ObjectId.isValid(id)){ //gelen id veritabanındaki objectId mi ve geçerli bir id mi kontrol ediyoruz.
-         return res.status(400).json({
-             error : "Object id is not valid"
-         })
-     }
+    if(isValidObjectId(id,res)) return //gelen id veritabanındaki objectId mi ve geçerli bir id mi kontrol ediyoruz.return diyerek kodun devamına gitmesini önlüyoruz. ve utils klasöründ einde dosyasındaki değeri return ediyoruz.
 
     //asenkron bir fonksiyon olduğu için try-catch bloğu kullannmak best practise dir.
     try {
-       
-        const book = await Book.findById(id); //id si gelen dökümanı veritabanından çektik.Id ye göre tek kitap getirişini sağladık.
-    
-        if(!book){ //eğer kitap yoksa hata mesajı döndürürüz.
-            return res.status(404).json({
-                error : "The Book is not exist"
-            })
-        }
+        const book = await findDocumentById(Book, id, res); //findDocumentById fonksiyonunu kullandık.
+        if(!book) return; //eğer kitap yoksa hata mesajı döndürürüz.
+
         res.status(200).json(book); //kitabı json formatında geri döndürdük.
     } catch (error) {
         console.error("Error at getABook", error);
@@ -112,19 +103,11 @@ const updateABook = async (req, res) => {
     const { id } = req.params; //url deki parametreleri alırız.
     const { title, author, description, pageNumber, rating } = req.body; //gelen json ı pars ederek title ve author değişkenlerine atadık.
 
-    if (!mongoose.Types.ObjectId.isValid(id)) { //gelen id veritabanındaki objectId mi ve geçerli bir id mi kontrol ediyoruz.,
-        return res.status(400).json({
-            error: "Object id is not valid"
-        })
-    }
+    if(isValidObjectId(id,res)) return //gelen id veritabanındaki objectId mi ve geçerli bir id mi kontrol ediyoruz.return diyerek kodun devamına gitmesini önlüyoruz. ve utils klasöründ einde dosyasındaki değeri return ediyoruz.
 
     try {
-        const book = await Book.findById(id); //id si gelen dökümanı veritabanından çektik.Id ye göre tek kitap getirişini sağladık.
-        if(!book) {
-            return res.status(404).json({
-                error: "The Book is not exist"
-            })
-        }
+        const book = await findDocumentById(Book, id, res); //findDocumentById fonksiyonunu kullandık.
+        if(!book) return; //eğer kitap yoksa hata mesajı döndürürüz.
 
         book.title = title || book.title; //gelen title varsa günceller yoksa eski title ı kullanır. 
         book.author = author || book.author;
@@ -149,9 +132,35 @@ const updateABook = async (req, res) => {
     }
 }
 
+//Kitap silme
+const deleteABook = async (req, res) => {
+    const { id } = req.params; //url deki parametreleri alırız.
+
+    if(isValidObjectId(id,res)) return //gelen id veritabanındaki objectId mi ve geçerli bir id mi kontrol ediyoruz.return diyerek kodun devamına gitmesini önlüyoruz. ve utils klasöründ einde dosyasındaki değeri return ediyoruz.
+        
+    try {
+        const book = await findDocumentById(Book, id, res); //findDocumentById fonksiyonunu kullandık.
+        if(!book) return; //eğer kitap yoksa hata mesajı döndürürüz.
+
+        await book.deleteOne(); //kitabı sildik.
+        res.status(200).json({
+            message: "The book deleted successfully"
+        }); //silinen kitabı json formatında geri döndürdük.
+        
+    } catch (error) {
+        console.error("Error at deleteABook", error);
+        return res.status(500).json(
+            {
+                error: "Internal Server Error"
+            }
+        )
+    }
+}
+
 export {
     getAllBooks,
     createABook,
     getABook,
-    updateABook
+    updateABook,
+    deleteABook
 }
