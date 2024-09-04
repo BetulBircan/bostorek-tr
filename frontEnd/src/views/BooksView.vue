@@ -20,7 +20,7 @@
 import SectionHeader from '@/components/SectionHeader.vue'
 import BookList from '@/components/BookList.vue';
 import Pagination from '@/components/Pagination.vue';
-import books from '@/db.js';
+
 export default {
     //hata ayıklamada derleyici tarafında hangi componenetin hata verdiğini anlamak için kullanılır.
     name: 'BooksView',
@@ -32,7 +32,7 @@ export default {
     data() {
         return {
             // sectionTitle : "Kitaplar",
-            books: books,
+            books: [],  //ilk durumda kitaplar boş olacak
             currentPage : 1,
             itemsPerPage : 8
 
@@ -55,8 +55,24 @@ export default {
     methods: {
         updatePage(page) {
             this.currentPage = page;
+        },
+
+        //backend e istek atıp kitapları çekecek
+        async fetchBooks() {
+            try {
+                const response = await fetch('http://localhost:4000/api/v1/books');
+                const data = await response.json(); //json formatında veri döner
+               this.books = data;
+                
+            } catch (error) {
+                console.error(error);
+            } 
         }
-    }   
+    },
+    
+    created() {
+        this.fetchBooks();
+    }
 }
 </script>
 

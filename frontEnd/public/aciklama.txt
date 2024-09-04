@@ -82,6 +82,27 @@ odaktan çıkınca inputa girilen değeri alır ve günceller.
 v-model.trim = inputa girilen boşlukları kaldırır. inputta boşluk kullanmasına izin vermesine rağmen girilen değeri 
 boşluklar olmayacak şekilde günceller.
 
+CORS HATASI
+
+const response = await fetch('http://localhost:4000/api/v1/books'); BURADA DİREK FETCH ATARKEN api adresine farklı bir originden 
+istek göndermeye çalışıyor o yüzden CORS HATASI ALIYOR
+http://localhost:4000 PORT NUMARALARI ORİJİNLERİ BELİRLER BACKENDİN Kİ Bu
+http://localhost:5173/ FRONTENDİN DE BU
+FARKLI ORİGİNDE OLDUĞU İÇİN İZİN VERİLMİYOR VARSAYILAN OLARAK 
+BU YÜZDEN BİZİM İZİN VERMEMİZ GEREKİYOR FARKLI ORİGİNLERDEN İSTEK ATABİLMEK İÇİN BACKEND E
+BU YÜZDEN CORS PARKETİ İNDİRİLİR. npm i cors
+backend>server.js dosyasında import edilir 
+import cors from 'cors';
+//CORS
+const corsOptions = {
+    origin : ['http://localhost:5173'],
+    credentials : true, //cookie,authorization header gibi bözelliklere izin vermemizi sağlar
+}
+
+//CORS Middleware
+app.use(cors(corsOptions));
+
+
 
 
 

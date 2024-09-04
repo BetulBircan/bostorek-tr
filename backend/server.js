@@ -7,13 +7,24 @@
 import express from 'express';
 import bookRoute from './routes/bookRoute.js';
 import connectDB from './config/db.js';
+import cors from 'cors';
 
 const app = express();
 const port = 4000;
 
+//CORS
+const corsOptions = {
+    origin : ['http://localhost:5173'],
+    credentials : true, //cookie,authorization header gibi bözelliklere izin vermemizi sağlar
+}
+
 //Burada express.js in bize sağladığı en büyük kolaylık gelen bir isteğe(request) karşı kolaylıkla cevap verebilmemizdir.(response)
 
 //Middleware
+
+//CORS Middleware
+app.use(cors(corsOptions));
+
 app.use(express.json()); //express.json() ile gelen requestin body kısmını json a çeviririz.
 
 //GET request
