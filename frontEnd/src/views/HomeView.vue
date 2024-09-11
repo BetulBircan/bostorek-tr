@@ -1,6 +1,6 @@
 <template>
     <section>
-        <Carousel :items="carouselItems"></Carousel>
+        <Carousel :items="carouselItems" height="400px"></Carousel>
     </section>
     <!-- directive örneği -->
     <!-- <img :src="imageSrc" :alt="imageAlt"> -->
