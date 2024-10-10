@@ -102,6 +102,13 @@ const corsOptions = {
 //CORS Middleware
 app.use(cors(corsOptions));
 
+//STATE MANAGEMENT, STORE MANTIĞI
+State : Bir uygulamanın belirli bir anında sahip olduğu verilerin durumu
+State Management : Stateleirn yani durumların birbirleriyle ilişkilerini yönetmek de statemanagement denir.
+Store : Bir uygulamanın verilerinin merkezi bir yerde toplanmasına da store denir.
+
+//Pinia : Önerilen durum  yönetim aracı vuejs in : npm install pinia
+
 
 
 

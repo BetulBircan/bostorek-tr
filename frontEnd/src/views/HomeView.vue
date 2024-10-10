@@ -49,7 +49,7 @@
                                     <div class="col-md-8 d-flex flex-column justify-content-center">
                                         <p>{{ book.description }}</p>
                                         <div class="badge align-self-start" style="background-color: var(--secondary-color);">
-                                            {{ book.rating }}
+                                            {{ formattedRating(book.rating) }}
                                         </div>
                                     </div>
                                    </div>
@@ -76,6 +76,8 @@ import hero_1 from '@/assets/images/hero_1.jpg';
 import hero_2 from '@/assets/images/hero_2.jpg';
 import hero_3 from '@/assets/images/hero_3.jpg';
 import SectionHeader from '@/components/SectionHeader.vue';
+import { useBookStore } from '@/stores/bookStore';
+import { mapState } from 'pinia';
 //import books from '@/db';
 
 export default {
@@ -91,7 +93,8 @@ export default {
                 { imageUrl: hero_2, subtitle: 'Egalite', title: 'Excepteur Sint Occaecat Cupidatat', description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
                 { imageUrl: hero_3, subtitle: 'Fraternite', title: 'Neque Porro Quisquam Est', description: 'Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.' }
             ],
-            books: [],
+            // books: [],
+            bookStore : useBookStore(),
             selectedFilter: 'latest',
             openAccordionIndex : 0,
             //    imageSrc : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2Tn86tojVvJkJ5f7vRa16CTtrSaMUgBBbYQ&s" ,
@@ -101,35 +104,26 @@ export default {
 
         }
     },
-    created() {
-        this.fetchBooks();
-    },
+
     methods : {
         selectFilter(filter) {
             this.selectedFilter = filter;
         },
-         //backend e istek atıp kitapları çekecek
-         async fetchBooks() {
-            try {
-                const response = await fetch('http://localhost:4000/api/v1/books');
-                const data = await response.json(); //json formatında veri döner
-                this.books = data;
-                console.log(this.books, 'books');
-                
-                
-            } catch (error) {
-                console.error(error);
-            } 
-        },
+        
         toggleAccordion(index) {
             if (this.openAccordionIndex === index) {
                 this.openAccordionIndex = -1;
             } else {
                 this.openAccordionIndex = index;
             }
-        }
+        },
+        formattedRating(rating) {
+      // Eğer rating tam sayıysa ondalıklı hale getiriyoruz
+      return Number.isInteger(rating) ? rating.toFixed(1) : rating;
+    },
     },
     computed : {
+        ...mapState(useBookStore, ['books']), //store dan books state ini çekiyoruz  
         filteredBooks() {
             const copiedBooks = [...this.books];
             if (this.selectedFilter === 'latest') {
@@ -137,7 +131,8 @@ export default {
             } else if (this.selectedFilter === 'best') {
                 return copiedBooks.sort((a, b) => b.rating - a.rating).slice(0,4); //en yüksek ratinge sahip kitaplar en başta olacak şekilde sıralıyoruz
             }   
-        }
+        },
+       
     }
 }
 </script>

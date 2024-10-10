@@ -23,7 +23,7 @@
                         </div>
                         <div class="row border-bottom pb-2">
                             <div class="col-lg-6"><strong>Rating</strong></div>
-                            <div class="col-lg-6">{{ book.rating }}</div>
+                            <div class="col-lg-6">{{formattedRating }}</div>
                         </div>
                         <div class="row border-bottom pb-2">
                             <div class="col-lg-6"><strong>Upload Date</strong></div>
@@ -148,6 +148,12 @@ component : BookDetailView
         // const bookId = this.$route.params.id;
         // this.book = books.find(book => book.id === parseInt(bookId));
 
+    },
+    computed : {
+        formattedRating() {
+      // Eğer rating tam sayıysa ondalıklı hale getiriyoruz
+      return Number.isInteger(this.book.rating) ? this.book.rating.toFixed(1) : this.book.rating;
+    },
     },
     methods: {
         goToBackBooks() {

@@ -14,7 +14,7 @@
         </div>
         <span
         :class="ratingBadgeClass"
-            class="position-absolute top-0 start-100 translate-middle p-2 text-light rounded-circle border border-2 border-light">{{ book.rating}}</span>
+            class="position-absolute top-0 start-100 translate-middle p-2 text-light rounded-circle border border-2 border-light">{{ formattedRating}}</span>
     </div>
 </template>
 
@@ -42,6 +42,10 @@ export default {
 
             }
         },
+        formattedRating() {
+      // Eğer rating tam sayıysa ondalıklı hale getiriyoruz
+      return Number.isInteger(this.book.rating) ? this.book.rating.toFixed(1) : this.book.rating;
+    },
        truncatedDescription() {
           if(this.book.description.length > 80) {
                 return this.book.description.slice(0, 80) + '...';
