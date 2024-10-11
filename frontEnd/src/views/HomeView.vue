@@ -1,6 +1,6 @@
 <template>
     <section>
-        <Carousel :items="carouselItems" height="400px"></Carousel>
+        <CarouselWidget :items="carouselItems" height="400px"></CarouselWidget>
     </section>
     <section class="my-5">
         <div class="container">
@@ -76,20 +76,23 @@
 
 <script>
 
-import Carousel from '@/components/widgets/Carousel.vue';
+//import CarouselWidget from '@/components/widgets/CarouselWidget.vue';
 import hero_1 from '@/assets/images/hero_1.jpg';
 import hero_2 from '@/assets/images/hero_2.jpg';
 import hero_3 from '@/assets/images/hero_3.jpg';
 import SectionHeader from '@/components/SectionHeader.vue';
 import { useBookStore } from '@/stores/bookStore';
 import { mapState, mapActions } from 'pinia';
+import LoadingSpinner from '@/components/widgets/SpinnerWidget.vue';
+import CarouselWidget from '@/components/widgets/CarouselWidget.vue';
 //import books from '@/db';
 
 export default {
     name: 'HomeView',
     components: {
-        Carousel,
-        SectionHeader
+        CarouselWidget,
+        SectionHeader,
+        LoadingSpinner
     },
     data() {
         return {
@@ -110,12 +113,13 @@ export default {
         }
     },
 
-    created() {
-        this.fetchBooks();
-    },
+    //nain.js de uygulama başlamadan önce veriler gelsiği için gerek kalmadı
+    // created() {
+    //     this.fetchBooks();
+    // },
 
     methods : {
-        ...mapActions(useBookStore, ['fetchBooks']),
+        // ...mapActions(useBookStore, ['fetchBooks']), //store dan books state ini çekiyoruz fakat mainçjs de yapıypruz zaten bunu
         selectFilter(filter) {
             this.selectedFilter = filter;
         },

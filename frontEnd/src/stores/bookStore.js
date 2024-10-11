@@ -7,6 +7,14 @@ export const useBookStore = defineStore('bookStore',{
         books : [],
         isLoading : false,
     }),
+
+    //getters : store üzerindeki state i okuyup işleyip başka bir değer döndüren fonksiyonlardır.
+    getters : {
+        selectedBooks(state) {
+            return (id) => state.books.find(book => book._id === id);
+        }
+    },
+
     //actions : store üzerinde state i manipüle edecek şekilde değiştirebilecek fonksiyonlardır. asenkron işlemler yapılabilir.
     //VERİTABANINDA VERİ OKUMA, VERİ YAZMAK, DEĞİŞTİRMEK GİBİ İŞLEMLERDE KULLANILIR.
     actions : {
@@ -29,7 +37,7 @@ export const useBookStore = defineStore('bookStore',{
     }
 })
 
- //backend e istek atıp kitapları çekecek
+ //backend e istek atıp kitapları çekecek fetch kullanılmış hali
         //  async fetchBooks() {
         //     try {
         //         const response = await fetch('http://localhost:4000/api/v1/books');

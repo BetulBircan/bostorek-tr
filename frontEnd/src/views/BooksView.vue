@@ -10,7 +10,7 @@
             <!-- <BookList :books="books"/> -->
             <BookList :books="paginetedBooks"/>    <!-- sayfa bazlı kitap sayısını gönderiyoruz -->
             <!-- @page-changed yazmamızın sebebi child component e emit ile bilgi aktarmak için kullanılır child dakie mit in adı kullanıldı -->
-            <Pagination :currentPage="currentPage" :totalPages="totalPages" @page-changed="updatePage"/>
+            <PaginationWidget :currentPage="currentPage" :totalPages="totalPages" @page-changed="updatePage"/>
 
         </div>
     </section>
@@ -19,7 +19,7 @@
 <script>
 import SectionHeader from '@/components/SectionHeader.vue'
 import BookList from '@/components/BookList.vue';
-import Pagination from '@/components/Pagination.vue';
+import PaginationWidget from '@/components/widgets/PaginationWidget.vue';
 import { useBookStore } from '@/stores/bookStore';
 import { mapState } from 'pinia';
 
@@ -29,7 +29,7 @@ export default {
     components: {
         SectionHeader,
         BookList,
-        Pagination
+        PaginationWidget
     },
     data() {
         return {

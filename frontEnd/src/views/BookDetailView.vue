@@ -116,17 +116,21 @@
             </div>
         </div>
         <div class="container" v-else>
-            <p>Book Detail Loading....</p>
+            <SpinnerWidget />
         </div>
     </section>
 </template>
 
 <script>
-import SectionHeader from '@/components/SectionHeader.vue'
+import SectionHeader from '@/components/SectionHeader.vue';
+import SpinnerWidget from '@/components/widgets/SpinnerWidget.vue';
+import { useBookStore } from '@/stores/bookStore';
+import { mapState } from 'pinia';
 export default {
     name: "BookDetailView",
     components: {
-        SectionHeader
+        SectionHeader,
+        SpinnerWidget
     },
     data() {
         return {
@@ -136,7 +140,7 @@ export default {
     },
     //created :metodu içerisinden routuerdaki id ye göre kitap bilgilerini alıp yansıtıyoruz.
     created() {
-        this.fetchABook();
+        this.selectBook();
         /*routerdaki parametreyi alır
          {
 path : '/books/:id',
@@ -161,14 +165,22 @@ component : BookDetailView
 
 
         },
-        async fetchABook() {
+        selectBook() {
             const bookId = this.$route.params.id;
-            const response = await fetch(`http://localhost:4000/api/v1/books/${bookId}`);
-            const data = await response.json();
-            this.book = data;
+            this.book = this.selectedBooks(bookId);
             this.loading = false;
-        }
-    }
+        },
+        // async fetchABook() {
+        //     const bookId = this.$route.params.id;
+        //     const response = await fetch(`http://localhost:4000/api/v1/books/${bookId}`);
+        //     const data = await response.json();
+        //     this.book = data;
+        //     this.loading = false;
+        // }
+    },
+    computed: {
+        ...mapState(useBookStore, ['selectedBooks']),
+    },
 }
 </script>
 
