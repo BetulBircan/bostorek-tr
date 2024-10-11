@@ -5,6 +5,7 @@ Bu proje kitapları listeleme, kitap ekleme , kitap içerikleri beğenme, yoruml
 - Expressjs
 - Vuejs
 - Node.js
+
 ## Tasarım İçin
 - Bootstrap
 
@@ -14,4 +15,22 @@ Bu proje kitapları listeleme, kitap ekleme , kitap içerikleri beğenme, yoruml
 - Vue Official
 - Thunder Client (Api isteklerini kontrol etmek için)
 - Material Icon Theme
+
+## Kullanılan Paketler
+- Vue Router - Sayfalara Yönlendirme
+- Pinia - State Management - Store
+- Cors - Tarayıcı Güvenliği
+- Nodemon - Suncu yenşden başlatma
+- .env - Bağlantı cümleleri vs yazılan yer . Güvenlik için
+
+## ANASAYFA
+
+## KİTAPLAR
+
+## KİTAP DETAY
+
+## ÜYE OLMA SAYFASI
+
+# ÜYE GİRİŞİ
+
 
