@@ -20,6 +20,8 @@
 import SectionHeader from '@/components/SectionHeader.vue'
 import BookList from '@/components/BookList.vue';
 import Pagination from '@/components/Pagination.vue';
+import { useBookStore } from '@/stores/bookStore';
+import { mapState } from 'pinia';
 
 export default {
     //hata ayıklamada derleyici tarafında hangi componenetin hata verdiğini anlamak için kullanılır.
@@ -32,14 +34,15 @@ export default {
     data() {
         return {
             // sectionTitle : "Kitaplar",
-            books: [],  //ilk durumda kitaplar boş olacak
             currentPage : 1,
-            itemsPerPage : 8
+            itemsPerPage : 8,
+            //bookStore : useBookStore(),
 
         }
     },
     //computed : var olan verilerden ya da component özelliklerinden bize birşeyler hesaplaması gerekir . hesaplanmış veriler olmasını sağlar 
      computed: {
+        ...mapState(useBookStore, ['books','isLoading']), //store dan books state ini çekiyoruz  
         totalPages() {
             //computed değeri buradaki bağlı değişkenlerin değerleir değiştiğinde hesaplanır.
             return Math.ceil(this.books.length / this.itemsPerPage); //math.ceil:ondalıklı bir sayıyı kendine en yakın olan bir fazlası tamsayıya dönüştürür.
@@ -58,21 +61,7 @@ export default {
         },
 
         //backend e istek atıp kitapları çekecek
-        async fetchBooks() {
-            try {
-                const response = await fetch('http://localhost:4000/api/v1/books');
-                const data = await response.json(); //json formatında veri döner
-               this.books = data;
-                
-            } catch (error) {
-                console.error(error);
-            } 
-        }
     },
-    
-    created() {
-        this.fetchBooks();
-    }
 }
 </script>
 

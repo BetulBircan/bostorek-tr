@@ -102,12 +102,16 @@ const corsOptions = {
 //CORS Middleware
 app.use(cors(corsOptions));
 
+//axiosService : veri tabanındaki isteklere erişmek için axios service den yararlanırız. npm install axios
+
 //STATE MANAGEMENT, STORE MANTIĞI
 State : Bir uygulamanın belirli bir anında sahip olduğu verilerin durumu
 State Management : Stateleirn yani durumların birbirleriyle ilişkilerini yönetmek de statemanagement denir.
 Store : Bir uygulamanın verilerinin merkezi bir yerde toplanmasına da store denir.
 
 //Pinia : Önerilen durum  yönetim aracı vuejs in : npm install pinia
+state : vuejs deki data görevini görür değişkenleri buraa tanımlarız
+action : state i etkileyecek fonksiyonları burada yazarız.
 
 
 
