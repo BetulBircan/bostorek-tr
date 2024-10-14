@@ -19,6 +19,8 @@ const register = async (req, res) => {
         //Kullanıcı Oluşturma
         const newUser = await User.create(req.body);
 
+        newUser.password = undefined; //şifreyi response da göstermek istemiyoruz. Bu yüzden undefined yaptık.frontend e giden kısım için ama veritabanında şifreli olarak PASSWORD alanı saklanır.
+
         return res
         .status(201)
         .json({ message: 'User created succesfully', user: newUser });

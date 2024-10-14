@@ -122,6 +122,8 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/authStore';
+import { mapActions } from 'pinia';
     export default {
         name : "RegisterView",
         data() {
@@ -155,7 +157,17 @@
             // updateGender(newGender) {
             //     this.formData.gender = newGender;
             // },
-            submitForm() {
+            ...mapActions(useAuthStore,["register"]),
+            async submitForm() {
+              try {
+                await this.register(this.formData);
+                console.log("KAYIT BAŞARILI");
+                
+                
+              } catch (error) {
+                console.log("KAYIT BAŞARISIZ",error);
+                
+              }
                 //submitForm(event) olarak method parametre alır
                 //event.preventDefault(); //submit edildiğinde sayfanın yenilenmesini engeller.
 

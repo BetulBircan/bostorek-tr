@@ -75,6 +75,8 @@ package.json da scripts kısmı
 
    utilities : controllerda tekrarlanan koşullar fonksiyonlar vs için tek bir yerden erişebilmesi için oluşturulur.
 
+   Bcrypt : "Password leri şifreleyerek veri tabanına kaydetmek için kullanırız." npm install bcryptjs
+
 
 
 
