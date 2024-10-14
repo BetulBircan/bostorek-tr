@@ -1,5 +1,5 @@
 import Book from "../models/Book.js";
-import { isValidObjectId, findDocumentById } from "../utils/index.js";
+import { isValidObjectId, findDocumentById, checkValidationErrors } from "../utils/index.js";
 
 //Tüm kitapları getirme
 const getAllBooks = async (req, res) => {
@@ -69,21 +69,7 @@ const createABook = async (req, res) => {
     } catch (error) {
         //Handle mongoose validation
         if (error.name === "ValidationError") {
-            const validationErrors = {}; //eğer zorunlu alanları girmezsek hata mesajını almak için bir obje oluşturduk
-
-            //her bir zorunlu alan için onların olup olmadığını kontrol eder zorunlu alan girilmemişse hata mesajını alıyoruz.
-            for (let field in error.errors) {
-                validationErrors[field] = error.errors[field].message;
-                //eğer zorunlu alan girilmediyse hata mesajını alıyoruz. ve validationErrors objesine ekliyoruz.
-
-            }
-
-            return res.status(400).json(
-                {
-                    message: "Validation Error",
-                    error: validationErrors
-                }
-            )
+            if(checkValidationErrors(error,res)) return
         }
 
         else {

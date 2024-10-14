@@ -32,8 +32,27 @@ const findDocumentById = async (model, id, res) => {
     }
 }
 
+const checkValidationErrors = (error,res) => {
+    const validationErrors = {}; //eğer zorunlu alanları girmezsek hata mesajını almak için bir obje oluşturduk
+
+    //her bir zorunlu alan için onların olup olmadığını kontrol eder zorunlu alan girilmemişse hata mesajını alıyoruz.
+    for (let field in error.errors) {
+        validationErrors[field] = error.errors[field].message;
+        //eğer zorunlu alan girilmediyse hata mesajını alıyoruz. ve validationErrors objesine ekliyoruz.
+
+    }
+
+    return res.status(400).json(
+        {
+            message: "Validation Error",
+            error: validationErrors
+        }
+    )
+}
+
 export {
     isValidObjectId, //isValidObjectId fonksiyonunu export ettik.
-    findDocumentById //findDocumentById fonksiyonunu export ettik.
+    findDocumentById, //findDocumentById fonksiyonunu export ettik.
+    checkValidationErrors //checkValidationErrors fonksiyonunu export ettik.
 }; 
 
