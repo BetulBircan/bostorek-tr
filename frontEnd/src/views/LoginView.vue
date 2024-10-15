@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/authStore';
+import { mapActions } from 'pinia';
 export default {
     name: 'LoginView',
     data() {
@@ -47,8 +49,18 @@ export default {
             }
         },
         methods : {
-            submitForm() {
-                console.log("LOGİN FORM DATA : ", this.formData,);
+            ...mapActions(useAuthStore, ["login"]),
+            async submitForm() {
+                try {
+                    await this.login(this.formData);
+                    console.log("LOGİN SUCCESSFULL");
+                } catch (error) {
+                    console.log("LOGİN FAİLED : ", error);
+                    
+                }
+                
+                
+                //console.log("LOGİN FORM DATA : ", this.formData,);
             }
         }
 }
