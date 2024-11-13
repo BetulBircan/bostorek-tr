@@ -113,6 +113,9 @@ Store : Bir uygulamanın verilerinin merkezi bir yerde toplanmasına da store de
 state : vuejs deki data görevini görür değişkenleri buraa tanımlarız
 action : state i etkileyecek fonksiyonları burada yazarız.
 
+//localStorage
+Kullanıcı giriş yaptığında onun bilgilerini tarayıcıda hala tutmak istersek localStorage depolama alanını kullanırız.
+
 
 
 

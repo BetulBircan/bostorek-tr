@@ -24,6 +24,8 @@ export const useBookStore = defineStore('bookStore',{
             try {
                 //await new Promise((resolve) => setTimeout(resolve, 3000)); //3 saniye bekletme
                 const response = await axios.get('http://localhost:4000/api/v1/books');
+                console.log(response.data, 'response');
+                
                 this.books = response.data;
                 //this.isLoading = false;
 

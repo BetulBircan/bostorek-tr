@@ -161,7 +161,8 @@ import { mapActions } from 'pinia';
             async submitForm() {
               try {
                 await this.register(this.formData);
-                console.log("KAYIT BAŞARILI");
+                this.$router.push('/login');
+                //console.log("KAYIT BAŞARILI");
                 
                 
               } catch (error) {
