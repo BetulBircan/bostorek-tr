@@ -18,7 +18,7 @@ export const useAuthStore = defineStore('authStore',{
                 const response = await axios.post('http://localhost:4000/api/v1/auth/register',newUserData);
                 return response.data
             } catch (error) {
-                throw error;
+                throw error.response.data;
             }
         },
 
