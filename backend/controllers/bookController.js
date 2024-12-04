@@ -120,6 +120,10 @@ const updateABook = async (req, res) => {
 
 //Kitap silme
 const deleteABook = async (req, res) => {
+
+    console.log("User : ", req.user); //burada gelen requestin user
+    
+
     const { id } = req.params; //url deki parametreleri alırız.
 
     if(isValidObjectId(id,res)) return //gelen id veritabanındaki objectId mi ve geçerli bir id mi kontrol ediyoruz.return diyerek kodun devamına gitmesini önlüyoruz. ve utils klasöründ einde dosyasındaki değeri return ediyoruz.

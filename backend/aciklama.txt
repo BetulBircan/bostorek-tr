@@ -77,6 +77,11 @@ package.json da scripts kısmı
 
    Bcrypt : "Password leri şifreleyerek veri tabanına kaydetmek için kullanırız." npm install bcryptjs
 
+  JWT DEVAMI NODE JS KANALINDA VAR NODEJS PROJELERİNDE 
+  JWT TOKEN OLUŞTURMAMIZ GEREKİYOR YETKİLENDİRME VE KULLANICI DOĞRULAMA İÇİN
+  KULLANICI GİRİŞ YAPTIKTAN SONRA TOKEN OLUŞTURULACAK
+
+
 
 
 

@@ -30,6 +30,12 @@ export const useAuthStore = defineStore('authStore',{
             } catch (error) {
                 console.error('Error at login user',error);
             }
+        },
+
+        logout() {
+            this.user = null;
+            localStorage.removeItem('user'); //local storage dan kullanıcı bilgilerini siler
+            location.reload(); //sayfayı yeniler
         }
     }
 })

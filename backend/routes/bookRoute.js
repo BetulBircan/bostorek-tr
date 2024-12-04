@@ -1,6 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import * as bookController from '../controllers/bookController.js'; //burada bookController dosyasında export ettiğimiz methodları kullanırız.
+import * as authMiddleware from '../middlewares/authMiddleware.js'; //burada authMiddleware dosyasında export ettiğimiz methodları kullanırız.
 
 //burada bookController dosyasındaki methodları kullanarak /api/v1/books/ isteklerini yönlendiririz.
 // router.get('/', bookController.getAllBooks); //burada /api/v1/books/ isteği geldiğinde bookController dosyasındaki getAllBooks methodunu çalıştırırız
@@ -19,7 +20,7 @@ router.route('/')
 router.route('/:id')
     .get(bookController.getABook)
     .put(bookController.updateABook)
-    .delete(bookController.deleteABook);
+    .delete(authMiddleware.authenticateUser, bookController.deleteABook);
 
 export default router;
 

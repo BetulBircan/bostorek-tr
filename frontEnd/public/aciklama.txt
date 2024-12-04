@@ -116,6 +116,13 @@ action : state i etkileyecek fonksiyonları burada yazarız.
 //localStorage
 Kullanıcı giriş yaptığında onun bilgilerini tarayıcıda hala tutmak istersek localStorage depolama alanını kullanırız.
 
+//kullanıcın email ve şifreyle giriş yapabilmesi ----> user Authentication - kullanıcı kimliği doğrulama email ve şifre doğru mu vs
+//user authorization ---> kullanıcı yetkilendirme - kullanıcın dashboard ı görüp görememesi
+
+//protected route --> korumalı endpoint sonuç
+
+
+
 
 
 

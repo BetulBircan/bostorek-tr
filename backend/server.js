@@ -15,8 +15,8 @@ const port = 4000;
 
 //CORS
 const corsOptions = {
-    origin : ['http://localhost:5174'],
-    //origin : ['http://localhost:5173'],
+    //origin : ['http://localhost:5174'],
+    origin : ['http://localhost:5173'],
     credentials : true, //cookie,authorization header gibi bözelliklere izin vermemizi sağlar
 }
 
