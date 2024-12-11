@@ -240,28 +240,28 @@ import { mapActions } from 'pinia';
                 //console.log(this.formData,"REGİSTERFORM DATA");
             }
         },
+    },
+    computed :  {
 
-        computed :  {
+isFormValid() {
+  return this.isUsernameValid && this.isEmailValid && this.isPasswordValid;
+},
 
-          isFormValid() {
-            return this.isUsernameValid && this.isEmailValid && this.isPasswordValid;
-          },
+isUsernameValid() {
+  return (this.formData.username.length >= 5 && this.formData.username.length <= 20);
+},
+isEmailValid() {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.formData.email);
+},
+isPasswordValid() {
+  return (this.formData.password.length >= 4 && this.formData.password.length <= 10);
+}
 
-          isUsernameValid() {
-            return (this.formData.username.length >= 5 && this.formData.username.length <= 20);
-          },
-          isEmailValid() {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.formData.email);
-          },
-          isPasswordValid() {
-            return (this.formData.password.length >= 4 && this.formData.password.length <= 10);
-          }
-
-        }
-    }
+}
+  }
 </script>
 
-<style scoped>
+<style scoped> 
 .form-control {
   border-radius: 25px;
   height: 48px;
