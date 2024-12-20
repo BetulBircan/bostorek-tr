@@ -56,7 +56,7 @@
               </label>
               <input
               type="email" class="form-control" id="email" name="email" 
-              v-model.trim="formData.email" required autocomplete="OFF"
+              v-model.trim="formData.email" required autocomplete="off"
               :class="{
                 'is-valid' : isEmailValid,
                 'is-invalid' : !isEmailValid && showEmailWarningMessage || existingEmail === formData.email
@@ -172,6 +172,7 @@
 <script>
 import { useAuthStore } from '@/stores/authStore';
 import { mapActions } from 'pinia';
+import { useToast } from "vue-toastification";
     export default {
         name : "RegisterView",
         data() {
@@ -214,7 +215,20 @@ import { mapActions } from 'pinia';
             async submitForm() {
               try {
                 await this.register(this.formData);
-                this.$router.push('/login');
+                
+                const toast = useToast();
+                toast.success('You will be redirect to login page', {
+                  position: "top-right",
+                  timeout: 3500,
+                  closeOnClick: true,
+                  closeButton: "button",
+                  icon: true,
+                });
+
+                setTimeout(() => {
+                  this.$router.push('/login');
+                }, 4000);
+
                 //console.log("KAYIT BAŞARILI");
                 
                 
@@ -262,25 +276,5 @@ isPasswordValid() {
 </script>
 
 <style scoped> 
-.form-control {
-  border-radius: 25px;
-  height: 48px;
-}
 
-.form-control:focus {
-  box-shadow: none;
-}
-
-.btn-primary {
-  border-radius: 25px;
-  height: 48px;
-  background-color: var(--secondary-color);
-  border-color: 1px solid var(--secondary-color);
-}
-
-.btn-primary:hover {
-  background-color: #fff;
-  color: 1px solid var(--secondary-color);
-  transition : all .3s ease;
-}
 </style>

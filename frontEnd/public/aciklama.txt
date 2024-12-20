@@ -121,6 +121,11 @@ Kullanıcı giriş yaptığında onun bilgilerini tarayıcıda hala tutmak ister
 
 //protected route --> korumalı endpoint sonuç
 
+//toastification --> genelde istek başarılı döndüğünde örneğin kayıt veya login olduğunda kullanıcıya işlem başarılı diye kayan mesaj
+göstermek için kullanılır.
+
+npm install --save vue-toastification@next
+
 
 
 

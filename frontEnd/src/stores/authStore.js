@@ -28,7 +28,7 @@ export const useAuthStore = defineStore('authStore',{
                this.user = response.data.user;
                localStorage.setItem('user',JSON.stringify(response.data.user)); //local storage a kullanıcı bilgilerini kaydeder. JSON.stringify ile JAVASCRİPT OBJESİNİ JSON stringe çeviririz.
             } catch (error) {
-                console.error('Error at login user',error);
+                throw error.response.data;
             }
         },
 
