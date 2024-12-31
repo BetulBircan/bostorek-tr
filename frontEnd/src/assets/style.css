@@ -37,6 +37,7 @@
     height: 48px;
     background-color: var(--secondary-color) !important;
     border-color: 1px solid var(--secondary-color) !important;
+    min-width : 175px !important;
   }
   
   .btn-primary:hover {
