@@ -27,6 +27,7 @@ export const useAuthStore = defineStore('authStore',{
                 const response = await axios.post('http://localhost:4000/api/v1/auth/login',userData);
                this.user = response.data.user;
                localStorage.setItem('user',JSON.stringify(response.data.user)); //local storage a kullanıcı bilgilerini kaydeder. JSON.stringify ile JAVASCRİPT OBJESİNİ JSON stringe çeviririz.
+               axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`; //axios.defaults.headers.common ile tüm axios isteklerine header ekleyebiliriz. Bearer token ile kullanıcıyı doğrularız. login olurken default olarakmkullanıcı token ını ekleriz
             } catch (error) {
                 throw error.response.data;
             }
