@@ -39,12 +39,19 @@
     border-color: 1px solid var(--secondary-color) !important;
     min-width : 175px !important;
   }
-  
+
   .btn-primary:hover {
     background-color: #fff !important;
     color: 1px solid var(--secondary-color) !important;
     transition : all .3s ease;
   }
+
+  .btn-outline-secondary {
+    border-radius: 25px;
+    height : 48px;
+    margin-right: 20px;
+    min-width: 175px !important;
+}
 
 
 
