@@ -19,11 +19,11 @@ const bookSchema = new mongoose.Schema(
             type: Number,
             min:1,
         },
-        rating : {
-            type: Number,
-            required : true,
-            min : 0,
-            max : 10
+        //kitabı ekleyen kullanıcı, kullanıcı ve kitap rasında ilişki kurulacak
+        userId : {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
         }
     },
    {timestamps : true} //bu opsiyon her dökümanımımızda iki adet ekleyecek otomatik olarak. bu iki alan da createdAtve updatedAt

@@ -11,6 +11,7 @@ import router from "@/router/index.js";
 import { createPinia } from 'pinia';
 import { useBookStore } from '@/stores/bookStore.js';
 import { useAuthStore } from '@/stores/authStore.js';
+import axios from 'axios';
 
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -34,6 +35,11 @@ const storedUser = localStorage.getItem('user');
 if(storedUser) {
     const userData = JSON.parse(storedUser); //JSON.parse ile JSON stringi JAVASCRİPT OBJESİNE çeviririz.
     useAuthStore(pinia).user = userData; 
+
+    const token = userData.token;
+    if(token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; //axios.defaults.headers.common ile tüm axios isteklerine header ekleyebiliriz
+    }
 }
 
 const bookStore = useBookStore(pinia);

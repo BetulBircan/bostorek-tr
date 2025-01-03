@@ -11,7 +11,7 @@ import * as authMiddleware from '../middlewares/authMiddleware.js'; //burada aut
 //zincirleme şeklinde de kullanılabilir
 router.route('/')
     .get(bookController.getAllBooks)
-    .post(bookController.createABook);
+    .post(authMiddleware.authenticateUser, bookController.createABook);
 
 // router.get('/:id', bookController.getABook); //burada /api/v1/books/:id isteği geldiğinde bookController dosyasındaki getABook methodunu çalıştırırız
 // router.put('/:id', bookController.updateABook); //burada /api/v1/books/:id isteği geldiğinde bookController dosyasındaki updateABook methodunu çalıştırırız

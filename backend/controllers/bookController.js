@@ -44,7 +44,9 @@ const getABook = async (req, res) => {
 const createABook = async (req, res) => {
     //console.log(req.body); //burada gelen requestin body kısmını yazdırırız. ama undefined alırız çünkü gönderilen json ı pars etmemiz lazım. 
     try {
-        const { title, author } = req.body; //gelen json ı pars ederek title ve author değişkenlerine atadık.
+        const { title, author, description, pageNumber } = req.body; //gelen json ı pars ederek title ve author değişkenlerine atadık.
+
+        const userId = req.user._id; //gelen requestin user kısmından _id yi aldık.
 
         const existingBook = await Book.findOne({ title, author }); //title ve author aynı olan bir döküman var mı kontrol ediyoruz.
 
@@ -57,7 +59,13 @@ const createABook = async (req, res) => {
         }
 
         //Book modelini kullanarak veritabanımızda yeni bir döküman oluşturacağız.
-        const newBook = await Book.create(req.body); //req.body ile gelen json ı kullanarak yeni bir döküman oluşturduk.
+        const newBook = await Book.create({
+            title,
+            author,
+            description,
+            pageNumber,
+            userId
+        }); //req.body ile gelen json ı kullanarak yeni bir döküman oluşturduk.
 
         return res.status(201).json(
             {
