@@ -16,6 +16,27 @@ const getAllBooks = async (req, res) => {
     }
 }
 
+//Kullanıcın eklediği kitapları getirme (Kullanıcıya özel kitaplar)
+const getBooksByUploader = async (req, res) => {
+    try {
+        const uploaderId = req.user._id; //gelen requestin user kısmından _id yi aldık.
+
+        const books = await Book.find({ userId: uploaderId }); //Book modelini kullanarak veritabanından userId si uploaderId olan tüm dökümanları çektik.
+        res.status(200).json(books); //tüm dökümanları json formatında geri döndürdük.
+        console.log("Books : ", books);
+        
+
+    } catch (error) {
+        console.error("Error at getBooksByUploader", error);
+        return res.status(500).json(
+            {
+                error: "Internal Server Error"
+            }
+        )   
+    }
+}
+
+
 //Tek bir kitabı getirme
 const getABook = async (req, res) => {
 
@@ -160,5 +181,6 @@ export {
     createABook,
     getABook,
     updateABook,
-    deleteABook
+    deleteABook,
+    getBooksByUploader
 }

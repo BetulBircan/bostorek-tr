@@ -2,6 +2,7 @@
      <!-- Button -->
     <div class="row-mb-3">
        <div class="col text-end">
+        <!--modal.show() modalı gösterir butonu tıklayınca modal açılır  -->
         <button type="button" class="btn btn-primary" @click="modal.show()">
             Add Book
         </button>
@@ -23,15 +24,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Gülün Adı</td>
-                        <td>Umberto Eco</td>
+                    <TransitionGroup name="list">
+                    <tr v-for="book in userBooks" :key="book._id">
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
                         <td style="max-width:250px">
-                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                            accusantium doloremque laudantium.
+                            {{ book.description }}
                         </td>
                         <td>
-                            217
+                           {{ book.pageNumber }}
                         </td>
                         <td class="text-center">
                             <font-awesome-icon :icon="['far','pen-to-square']" class="text-warning" style="cursor:pointer" />
@@ -40,6 +41,7 @@
                             <font-awesome-icon :icon="['fas', 'trash']" class="text-danger" style="cursor:pointer" @click="deleteBook(book._id)"/>
                         </td>
                     </tr>
+                </TransitionGroup>
                 </tbody>
             </table>
         </div>
@@ -52,6 +54,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addModalLabel">Add Book</h5>
+                    <!-- modal.hide() modal gizlenir yani butona basınca kapatılır-->
                     <button type="button" class="btn-close" aria-label="Close" @click="modal.hide()"></button>
                 </div>
                 <div class="modal-body mx-5">
@@ -92,7 +95,8 @@
 <script>
 import { Modal } from 'bootstrap';
 import { useBookStore } from '@/stores/bookStore';
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
+import { useToast } from 'vue-toastification';
     export default {
         name : 'DashboardBooks',
         data() {
@@ -118,13 +122,48 @@ import { mapActions } from 'pinia';
         - Created ve mounted hook ları arasındaki en önemli fark created sayfa olultuğu anda, mounted ise dom a yerleştirildiği anda çalışır
          */
         mounted() {
+            //modal nesnesi oluşturulur addEditModal modalı ile bağlantı kurulur onu referans alır.
             this.modal = new Modal(this.$refs.addEditModal);
         },
+
+        created() {
+            this.fetchBooksByUploader();
+        },
+
+        computed : {
+            ...mapState(useBookStore, ['userUploadedBooks']),
+            userBooks() {
+                return this.userUploadedBooks.slice().sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+            }
+        },
+
         methods : {
-            ...mapActions(useBookStore, ['addNewBook']),
+            ...mapActions(useBookStore, ['addNewBook','fetchBooksByUploader']),
             async addBook() {
                try {
                 await this.addNewBook(this.newBook);
+                this.modal.hide();
+
+                this.newBook = {
+                   title : '',
+                   author : '',
+                   description : '',
+                   pageNumber : null
+               }
+
+               this.fetchBooksByUploader();
+
+               const toast = useToast();
+
+               toast.success('New book added successfully', {
+                position : 'top-right',
+                timeout : 1000,
+                closeButton : 'button',
+                icon : true,
+                rtl : false
+
+               })
+
                } catch (error) {
                  console.error(error);
                 
@@ -136,5 +175,14 @@ import { mapActions } from 'pinia';
 </script>
 
 <style scoped>
+.list-enter-active, 
+.list-leave-active {
+    transition: all 2s ease;
+}
 
+.list-enter-from,
+list-leave-to {
+    opacity: 0;
+    transform: translateX(300px);
+}
 </style>

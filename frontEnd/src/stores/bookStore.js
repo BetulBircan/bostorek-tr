@@ -6,6 +6,7 @@ export const useBookStore = defineStore('bookStore',{
     state : () => ({
         books : [],
         isLoading : false,
+        userUploadedBooks : []
     }),
 
     //getters : store üzerindeki state i okuyup işleyip başka bir değer döndüren fonksiyonlardır.
@@ -36,6 +37,19 @@ export const useBookStore = defineStore('bookStore',{
                 this.isLoading = false;
             }
         },
+
+        async fetchBooksByUploader() {
+            try {
+                const response = await axios.get('http://localhost:4000/api/v1/books/uploader'); 
+                console.log(response.data, 'response');
+                
+                this.userUploadedBooks = response.data;
+            } catch (error) {
+                console.error('Error at fetching user uploaded books',error);
+                
+            }
+        },
+
         async addNewBook(newBook) {
             console.log('Store new book', newBook);
             

@@ -17,10 +17,15 @@ router.route('/')
 // router.put('/:id', bookController.updateABook); //burada /api/v1/books/:id isteği geldiğinde bookController dosyasındaki updateABook methodunu çalıştırırız
 // router.delete('/:id', bookController.deleteABook); //burada /api/v1/books/:id isteği geldiğinde bookController dosyasındaki deleteABook methodunu çalıştırırız
 
+//burada kullanıcının eklediği kitapları getirir
+router.route('/uploader').get(authMiddleware.authenticateUser, bookController.getBooksByUploader);
+
 router.route('/:id')
     .get(bookController.getABook)
     .put(bookController.updateABook)
     .delete(authMiddleware.authenticateUser, bookController.deleteABook);
+
+
 
 export default router;
 
