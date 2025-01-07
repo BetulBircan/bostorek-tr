@@ -165,7 +165,7 @@ import { useToast } from 'vue-toastification';
                })
 
                } catch (error) {
-                 console.error(error);
+                 
                 
                }
             }

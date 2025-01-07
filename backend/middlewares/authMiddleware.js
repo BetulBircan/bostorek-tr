@@ -22,13 +22,19 @@ const authenticateUser = async (req, res, next) => {
 
     try {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        console.log('decodedToken',decodedToken);
 
         req.user = await User.findById(decodedToken.userId);
 
         next();
         
     } catch (error) {
+        console.log(error.name, 'error');
+        if(error.name === 'TokenExpiredError') {
+            return res.status(401).json({message: 'Token has expired!'});
+        }
+        else {
+            return res.status(500).json({message: 'Internal Server Error!'});
+        }
         
     }
 

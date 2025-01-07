@@ -50,15 +50,13 @@ export const useBookStore = defineStore('bookStore',{
             }
         },
 
-        async addNewBook(newBook) {
-            console.log('Store new book', newBook);
-            
+        async addNewBook(newBook) { 
             try {
                 const response = await axios.post('http://localhost:4000/api/v1/books', newBook);
                 console.log(response.data, 'response');
                 this.books.push(response.data.book);
             } catch (error) {
-                console.error('Error at adding new book',error);
+               throw error.response.data;
             }
         }
     }

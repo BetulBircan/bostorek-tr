@@ -69,9 +69,12 @@ const login = async (req, res) => {
 
         user.password = undefined;
 
+        const expirationTime = 60 * 60 * 24 * 7; //1 week
+
         //generate token
         const token = jwt.sign({ userId : user._id }, process.env.JWT_SECRET_KEY, {
-            expiresIn: process.env.JWT_EXPIRE_TIME,
+            //expiresIn: process.env.JWT_EXPIRE_TIME,
+            expiresIn: expirationTime
         });
 
 

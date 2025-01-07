@@ -25,10 +25,37 @@ import { faThumbsUp } from '@fortawesome/free-regular-svg-icons'
 import { faPenToSquare } from '@fortawesome/free-regular-svg-icons'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
+import { useToast } from 'vue-toastification';
+const toast = useToast();
+
 /* add icons to the library */
 library.add(faArrowLeft, faThumbsUp, faPenToSquare, faTrash)
 
 const pinia = createPinia();
+const authStore = useAuthStore(pinia);
+
+//axios Interceptor. Axios içerisinde bir middleware arayazılım. Request ve response lara kaydedebileceğimiz işlevsellikler oluşturmaya yarar. 
+axios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        
+        if(error.response && error.response.status === 401) {
+            //Display Toast Message
+            toast.error('Your token has expired, forwarding login page', {
+                position : 'top-right',
+                timeout: 3000,
+                closeButton : 'button',
+                icon : true,
+                rtl : false,
+            });
+
+            setTimeout(() => {
+                authStore.logout();
+                router.push('/login');
+            }, 3000);
+        }
+    }
+)
 
 const storedUser = localStorage.getItem('user');
 
@@ -44,6 +71,8 @@ if(storedUser) {
 
 const bookStore = useBookStore(pinia);
 
+//axios ınterceptor ---> Eğer hata varsa ve bu hatanın kodu 401 ise toast mesajı göster (token ınınz expire oldu  logine yönlendiriliyorsunuz) yaz ve login e yönlendr çıkış işlemi yap.
+ 
 //uygulama başladığında kitapları çekecek
 bookStore.fetchBooks().then(() => {
     const app = createApp(App);
