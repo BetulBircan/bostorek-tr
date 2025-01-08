@@ -58,6 +58,15 @@ export const useBookStore = defineStore('bookStore',{
             } catch (error) {
                throw error.response.data;
             }
+        },
+
+        async deleteTheBook(bookId) {
+            try {
+                await axios.delete(`http://localhost:4000/api/v1/books/${bookId}`);
+                this.books = this.books.filter(book => book._id !== bookId);
+            } catch (error) {
+                throw error.response.data;
+            }
         }
     }
 })

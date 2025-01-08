@@ -23,8 +23,8 @@
                         <th class="text-center">Delete</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <TransitionGroup name="list">
+                
+                    <TransitionGroup name="list" tag="tbody">
                     <tr v-for="book in userBooks" :key="book._id">
                         <td>{{ book.title }}</td>
                         <td>{{ book.author }}</td>
@@ -38,11 +38,12 @@
                             <font-awesome-icon :icon="['far','pen-to-square']" class="text-warning" style="cursor:pointer" />
                         </td>
                         <td class="text-center">
-                            <font-awesome-icon :icon="['fas', 'trash']" class="text-danger" style="cursor:pointer" @click="deleteBook(book._id)"/>
+                            <font-awesome-icon :icon="['fas', 'trash']" class="text-danger" style="cursor:pointer" @click="openDeleteModal(book._id, book.title)"/>
+                            <!-- <font-awesome-icon :icon="['fas', 'trash']" class="text-danger" style="cursor:pointer" @click="deleteBook(book._id, book.title)"/> -->
                         </td>
                     </tr>
                 </TransitionGroup>
-                </tbody>
+                
             </table>
         </div>
      </div>
@@ -82,7 +83,7 @@
                         </label>
                         <input v-model="newBook.pageNumber" type="number" class="form-control" id="numOfPages" name="numOfPages" required>
                     </div>
-                    <div class="text-end mb-4">
+                    <div class="text-end mb-4 d-flex justify-content-end">
                         <button type="button" class="btn btn-outline-secondary" @click="modal.hide()">Close</button>
                         <button type="button" class="btn btn-primary" @click="addBook">Save</button>
                     </div>
@@ -90,6 +91,28 @@
             </div>
         </div>
       </div>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" ref="deleteModal" tabindex="-1"  aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">Silmek İçin Onay</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="deleteModal.hide()"></button>
+            </div>
+            <div class="modal-body mx-5">
+                <div>
+                    <p>Are you sure you want to delete <strong>{{ denemeBook.title }}</strong> book?</p>
+                </div>
+                <div class="text-end d-flex justify-content-end"">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" @click="deleteModal.hide()">Cancel</button>
+                <button type="button" class="btn btn-primary" @click="deleteBook(denemeBook.id, denemeBook.title)">Confirm</button>
+            </div>
+            </div>
+            
+            </div>
+        </div>
+        </div>
 </template>
 
 <script>
@@ -102,12 +125,18 @@ import { useToast } from 'vue-toastification';
         data() {
             return {
                modal : null,
+            //    deleteModal : null,
                newBook : {
                    title : '',
                    author : '',
                    description : '',
                    pageNumber : null
-               }
+               },
+               denemeBook : {
+                id : '',
+                   title : '',
+                   
+               },
             }
         },
         /*
@@ -124,6 +153,7 @@ import { useToast } from 'vue-toastification';
         mounted() {
             //modal nesnesi oluşturulur addEditModal modalı ile bağlantı kurulur onu referans alır.
             this.modal = new Modal(this.$refs.addEditModal);
+            this.deleteModal = new Modal(this.$refs.deleteModal);
         },
 
         created() {
@@ -138,7 +168,53 @@ import { useToast } from 'vue-toastification';
         },
 
         methods : {
-            ...mapActions(useBookStore, ['addNewBook','fetchBooksByUploader']),
+            ...mapActions(useBookStore, ['addNewBook','fetchBooksByUploader','deleteTheBook']),	
+
+            showToast(message, options) {
+                const toast = useToast();
+
+                toast(message, {
+                    position : 'top-right',
+                    closeButton : 'button',
+                    icon : true,
+                    rtl : false,
+                    ...options
+                });
+            },
+
+            openDeleteModal(bookId, bookTitle) {
+                this.deleteModal.show();
+                this.denemeBook.id = bookId;
+                this.denemeBook.title = bookTitle;
+            },
+
+            async deleteBook(bookId, bookTitle) {
+                try {
+                    
+                    await this.deleteTheBook(bookId);
+                    this.deleteModal.hide();
+                    
+                    await this.fetchBooksByUploader();
+
+                    this.showToast(`${bookTitle} deleted successfully`, {
+                        type : 'warning',
+                        timeout : 3000
+                    });
+
+                    // const toast = useToast();
+
+                    // toast.warning(`${bookTitle} deleted successfully`, {
+                    //     position : 'top-right',
+                    //     timeout : 3000,
+                    //     closeButton : 'button',
+                    //     icon : true,
+                    //     rtl : false
+                    // })
+                } catch (error) {
+                    console.log(error);
+                    
+                }
+            },
             async addBook() {
                try {
                 await this.addNewBook(this.newBook);
@@ -153,19 +229,25 @@ import { useToast } from 'vue-toastification';
 
                this.fetchBooksByUploader();
 
-               const toast = useToast();
+               this.showToast('New book added successfully', {
+                   type : 'success',
+                   timeout : 1000
+               });
 
-               toast.success('New book added successfully', {
-                position : 'top-right',
-                timeout : 1000,
-                closeButton : 'button',
-                icon : true,
-                rtl : false
+            //    const toast = useToast();
 
-               })
+            //    toast.success('New book added successfully', {
+            //     position : 'top-right',
+            //     timeout : 1000,
+            //     closeButton : 'button',
+            //     icon : true,
+            //     rtl : false
+
+            //    })
 
                } catch (error) {
                  
+                console.log(error);
                 
                }
             }
@@ -175,14 +257,21 @@ import { useToast } from 'vue-toastification';
 </script>
 
 <style scoped>
-.list-enter-active, 
+.list-move, /* apply transition to moving elements */
+.list-enter-active,
 .list-leave-active {
-    transition: all 2s ease;
+  transition: all 2s ease;
 }
 
 .list-enter-from,
-list-leave-to {
-    opacity: 0;
-    transform: translateX(300px);
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(300px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.list-leave-active {
+  position: absolute;
 }
 </style>
