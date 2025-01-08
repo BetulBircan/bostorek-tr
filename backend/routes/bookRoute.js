@@ -22,7 +22,7 @@ router.route('/uploader').get(authMiddleware.authenticateUser, bookController.ge
 
 router.route('/:id')
     .get(bookController.getABook)
-    .put(bookController.updateABook)
+    .put(authMiddleware.authenticateUser ,bookController.updateABook)
     .delete(authMiddleware.authenticateUser, bookController.deleteABook);
 
 

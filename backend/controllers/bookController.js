@@ -116,7 +116,7 @@ const createABook = async (req, res) => {
 const updateABook = async (req, res) => {
 
     const { id } = req.params; //url deki parametreleri alırız.
-    const { title, author, description, pageNumber, rating } = req.body; //gelen json ı pars ederek title ve author değişkenlerine atadık.
+    const { title, author, description, pageNumber } = req.body; //gelen json ı pars ederek title ve author değişkenlerine atadık.
 
     if(isValidObjectId(id,res)) return //gelen id veritabanındaki objectId mi ve geçerli bir id mi kontrol ediyoruz.return diyerek kodun devamına gitmesini önlüyoruz. ve utils klasöründ einde dosyasındaki değeri return ediyoruz.
 
@@ -128,12 +128,11 @@ const updateABook = async (req, res) => {
         book.author = author || book.author;
         book.description = description || book.description;
         book.pageNumber = pageNumber || book.pageNumber;
-        book.rating = rating || book.rating;
 
         await book.save(); //kitabı güncelledik.
 
         res.status(200).json({
-            message: "The book updated successfully",
+            message: "The book updated successfully",book
             
         }); //güncellenmiş kitabı json formatında geri döndürdük.
         

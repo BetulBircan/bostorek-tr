@@ -55,6 +55,7 @@ export const useBookStore = defineStore('bookStore',{
                 const response = await axios.post('http://localhost:4000/api/v1/books', newBook);
                 console.log(response.data, 'response');
                 this.books.push(response.data.book);
+                await this.fetchBooksByUploader();
             } catch (error) {
                throw error.response.data;
             }
@@ -67,7 +68,26 @@ export const useBookStore = defineStore('bookStore',{
             } catch (error) {
                 throw error.response.data;
             }
-        }
+        },
+
+        async editTheBook(bookId, bookData) {
+            try {
+                const response = await axios.put(`http://localhost:4000/api/v1/books/${bookId}`, bookData);
+
+                const updatedBookData = response.data.book;
+
+                //kitabın indexini bulup güncel veri ile değiştirme
+                const bookIndex = this.books.findIndex(book => book._id === bookId);
+                //ğer index bulunmazsa -1 döner
+                if(bookIndex !== -1) {
+                    this.books.splice(bookIndex, 1, updatedBookData);
+                }
+
+            } catch (error) {
+                throw error.response.data;
+                
+            }
+        },
     }
 })
 

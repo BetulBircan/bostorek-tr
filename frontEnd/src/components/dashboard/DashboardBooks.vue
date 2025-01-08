@@ -3,7 +3,7 @@
     <div class="row-mb-3">
        <div class="col text-end">
         <!--modal.show() modalı gösterir butonu tıklayınca modal açılır  -->
-        <button type="button" class="btn btn-primary" @click="modal.show()">
+        <button type="button" class="btn btn-primary" @click="openAddModal()">
             Add Book
         </button>
        </div>
@@ -35,7 +35,7 @@
                            {{ book.pageNumber }}
                         </td>
                         <td class="text-center">
-                            <font-awesome-icon :icon="['far','pen-to-square']" class="text-warning" style="cursor:pointer" />
+                            <font-awesome-icon :icon="['far','pen-to-square']" class="text-warning" style="cursor:pointer" @click="openEditModal(book)"/>
                         </td>
                         <td class="text-center">
                             <font-awesome-icon :icon="['fas', 'trash']" class="text-danger" style="cursor:pointer" @click="openDeleteModal(book._id, book.title)"/>
@@ -54,7 +54,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">Add Book</h5>
+                    <h5 class="modal-title" id="addModalLabel"></h5>{{ modalTitle }}
                     <!-- modal.hide() modal gizlenir yani butona basınca kapatılır-->
                     <button type="button" class="btn-close" aria-label="Close" @click="modal.hide()"></button>
                 </div>
@@ -63,29 +63,29 @@
                         <label for="title" class="form-label">Title
                         <span class="text-danger">*</span>
                         </label>
-                        <input v-model="newBook.title" type="text" class="form-control" id="title" name="title" required />
+                        <input v-model="bookData.title" type="text" class="form-control" id="title" name="title" required />
                     </div>
                     <div class="col mb-3">
                         <label for="author" class="form-label">Author
                             <span class="text-danger">*</span>
                         </label>
-                        <input v-model="newBook.author" type="text" class="form-control" id="author" name="author" required>
+                        <input v-model="bookData.author" type="text" class="form-control" id="author" name="author" required>
                     </div>
                     <div class="col mb-3">
                         <label for="description" class="form-label">Description
                             <span class="text-danger">*</span>
                         </label>
-                        <textarea v-model="newBook.description" name="description" id="description" class="form-control" cols="30" rows="10"></textarea>
+                        <textarea v-model="bookData.description" name="description" id="description" class="form-control" cols="30" rows="10"></textarea>
                     </div>
                     <div class="col mb-3">
                         <label for="author" class="form-label">Number Of Pages
                             <span class="text-danger">*</span>
                         </label>
-                        <input v-model="newBook.pageNumber" type="number" class="form-control" id="numOfPages" name="numOfPages" required>
+                        <input v-model="bookData.pageNumber" type="number" class="form-control" id="numOfPages" name="numOfPages" required>
                     </div>
                     <div class="text-end mb-4 d-flex justify-content-end">
                         <button type="button" class="btn btn-outline-secondary" @click="modal.hide()">Close</button>
-                        <button type="button" class="btn btn-primary" @click="addBook">Save</button>
+                        <button type="button" class="btn btn-primary" @click="saveBook()">Save</button>
                     </div>
                 </div>
             </div>
@@ -122,18 +122,21 @@ import { Modal } from 'bootstrap';
 import { useBookStore } from '@/stores/bookStore';
 import { mapActions, mapState } from 'pinia';
 import { useToast } from 'vue-toastification';
+
     export default {
         name : 'DashboardBooks',
         data() {
             return {
                modal : null,
-            //    deleteModal : null,
-               newBook : {
+            deleteModal : null,
+            modalTitle : 'Add Book',
+               bookData : {
                    title : '',
                    author : '',
                    description : '',
                    pageNumber : null
                },
+               editedBookId : null,
                denemeBook : {
                 id : '',
                    title : '',
@@ -170,7 +173,41 @@ import { useToast } from 'vue-toastification';
         },
 
         methods : {
-            ...mapActions(useBookStore, ['addNewBook','fetchBooksByUploader','deleteTheBook']),	
+            ...mapActions(useBookStore, ['addNewBook','fetchBooksByUploader','deleteTheBook','editTheBook']),	
+
+            saveBook() {
+                if(this.modalTitle === 'Add Book') {
+                    this.addBook();
+                } else if(this.modalTitle === 'Edit Book') {
+                    this.editBook();
+                }
+            },
+
+            //Kitap eklemek için
+            openAddModal() {
+                this.modalTitle = 'Add Book';
+                this.bookData = {
+                    title : '',
+                    author : '',
+                    description : '',
+                    pageNumber : null
+                }
+                this.modal.show();
+
+            },
+
+            //Kitap Düzenlemek için
+            openEditModal(existingBook) {
+                this.modalTitle = 'Edit Book';
+                this.editedBookId = existingBook._id;
+                this.bookData = {
+                    title : existingBook.title,
+                    author : existingBook.author,
+                    description : existingBook.description,
+                    pageNumber : existingBook.pageNumber
+                }
+                this.modal.show();
+            },
 
             showToast(message, options) {
                 const toast = useToast();
@@ -184,10 +221,29 @@ import { useToast } from 'vue-toastification';
                 });
             },
 
+            //Kitap silmek için
             openDeleteModal(bookId, bookTitle) {
                 this.deleteModal.show();
                 this.denemeBook.id = bookId;
                 this.denemeBook.title = bookTitle;
+            },
+
+            async editBook() {
+                try {
+                    await this.editTheBook(this.editedBookId, this.bookData);
+
+                    await this.fetchBooksByUploader();
+
+                    this.modal.hide();
+
+                    this.showToast('The book edited successfully', {
+                        type : 'success',
+                        timeout : 3000
+                    });
+                } catch (error) {
+                    console.log(error);
+                    
+                }
             },
 
             async deleteBook(bookId, bookTitle) {
@@ -219,17 +275,17 @@ import { useToast } from 'vue-toastification';
             },
             async addBook() {
                try {
-                await this.addNewBook(this.newBook);
+                await this.addNewBook(this.bookData);
                 this.modal.hide();
 
-                this.newBook = {
+                this.bookData = {
                    title : '',
                    author : '',
                    description : '',
                    pageNumber : null
                }
 
-               this.fetchBooksByUploader();
+               //this.fetchBooksByUploader();
 
                this.showToast('New book added successfully', {
                    type : 'success',
