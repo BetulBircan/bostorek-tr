@@ -93,26 +93,28 @@
       </div>
 
         <!-- Delete Modal -->
-        <div class="modal fade" ref="deleteModal" tabindex="-1"  aria-hidden="true">
+        <div class="modal fade" ref="deleteModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="deleteModalLabel">Silmek İçin Onay</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="deleteModal.hide()"></button>
-            </div>
-            <div class="modal-body mx-5">
-                <div>
-                    <p>Are you sure you want to delete <strong>{{ denemeBook.title }}</strong> book?</p>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Delete Book</h5>
+                    <!-- modal.hide() modal gizlenir yani butona basınca kapatılır-->
+                    <button type="button" class="btn-close" aria-label="Close" @click="deleteModal.hide()"></button>
                 </div>
-                <div class="text-end d-flex justify-content-end"">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" @click="deleteModal.hide()">Cancel</button>
-                <button type="button" class="btn btn-primary" @click="deleteBook(denemeBook.id, denemeBook.title)">Confirm</button>
-            </div>
-            </div>
-            
+                <div class="modal-body mx-5">
+                    <div class="col mb-3">
+                        <p>Are you sure you want to delete <strong>{{ denemeBook.title }}</strong> book?</p>
+                    </div>
+                  
+                    <div class="text-end mb-4 d-flex justify-content-end">
+                        <button type="button" class="btn btn-outline-secondary" @click="deleteModal.hide()">Close</button>
+                        <button type="button" class="btn btn-primary" @click="deleteBook(denemeBook.id, denemeBook.title)">Confirm</button>
+                    </div>
+                </div>
             </div>
         </div>
-        </div>
+      </div>
+
 </template>
 
 <script>
