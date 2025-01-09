@@ -23,7 +23,7 @@
   align-items: center;
   } 
   
-  .form-control {
+  .form-control:not(textarea) {
     border-radius: 25px;
     height: 48px;
   }
@@ -53,6 +53,18 @@
     min-width: 175px !important;
 }
 
+.page-link {
+  color: var(--primary-color);
+}
+
+.page-link:hover {
+ cursor : pointer
+}
+
+.page-link, .pahe-link.active {
+  background-color: var(--secondary-color) !important;
+  color: #fff !important;
+}
 
 
   
