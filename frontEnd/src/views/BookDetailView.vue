@@ -54,10 +54,10 @@
                 <div class="col-md-12">
                     <div class="box">
                         <h3 style="color:var(--primary-color)">Comment The Book</h3>
-                        <form>
+                        <form @submit.prevent = "addComment">
                             <!-- Comment Text Area -->
                              <div class="mb-3">
-                                <textarea id="comment" class="form-control" rows="4" placeholder="Enter your comment" required></textarea>
+                                <textarea id="comment" class="form-control" rows="4" placeholder="Enter your comment" required v-model="commentContent"></textarea>
                              </div>
                              <!-- Submit Button -->
                               <button type="submit" class="btn btn-primary">Comment</button>
@@ -113,115 +113,7 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="row mb-4">
-                <div class="col-lg-6">
-                    <img class="card-img-top" src="../../template/images/b_detail.jpg" alt="Book Image"></img>
-                </div>
-                <div class="col-lg-6 details-wrapper">
-                    <p class="lead description">{{ book.description }}
-                    </p>
-                    <div class="mb-4">
-                        <div class="row border-bottom pb-2">
-                            <div class="col-lg-6"><strong>Page</strong></div>
-                            <div class="col-lg-6">{{ book.pageNumber }}</div>
-                        </div>
-                        <div class="row border-bottom pb-2">
-                            <div class="col-lg-6"><strong>Category</strong></div>
-                            <div class="col-lg-6">Fiction</div>
-                        </div>
-                        <div class="row border-bottom pb-2">
-                            <div class="col-lg-6"><strong>Rating</strong></div>
-                            <div class="col-lg-6">{{formattedRating }}</div>
-                        </div>
-                        <div class="row border-bottom pb-2">
-                            <div class="col-lg-6"><strong>Upload Date</strong></div>
-                            <div class="col-lg-6"> {{ book.updatedAt }}</div>
-                        </div>
-                    </div>
-
-                    <div class="comments-section">
-                        <h3 class="display-6 mb-2">Comments</h3>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error,
-                                    expedita.</p>
-                                <div class="d-flex justify-content-between">
-                                    <p class="fw-bold fst-italic">John Doe</p>
-                                    <div class="d-flex align-items-center">
-                                        <font-awesome-icon icon="fa-regular fa-thumbs-up" />
-                                        <p class="ps-2 mb-0"><strong>8</strong></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error,
-                                    expedita.</p>
-                                <div class="d-flex justify-content-between">
-                                    <p class="fw-bold fst-italic">John Doe</p>
-                                    <div class="d-flex align-items-center">
-                                        <font-awesome-icon icon="fa-regular fa-thumbs-up" />
-                                        <p class="ps-2 mb-0"><strong>8</strong></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error,
-                                    expedita.</p>
-                                <div class="d-flex justify-content-between">
-                                    <p class="fw-bold fst-italic">John Doe</p>
-                                    <div class="d-flex align-items-center">
-                                        <font-awesome-icon icon="fa-regular fa-thumbs-up" />
-                                        <p class="ps-2 mb-0"><strong>8</strong></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error,
-                                    expedita.</p>
-                                <div class="d-flex justify-content-between">
-                                    <p class="fw-bold fst-italic">John Doe</p>
-                                    <div class="d-flex align-items-center">
-                                        <font-awesome-icon icon="fa-regular fa-thumbs-up" />
-                                        <p class="ps-2 mb-0"><strong>8</strong></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error,
-                                    expedita.</p>
-                                <div class="d-flex justify-content-between">
-                                    <p class="fw-bold fst-italic">John Doe</p>
-                                    <div class="d-flex align-items-center">
-                                        <font-awesome-icon icon="fa-regular fa-thumbs-up" />
-                                        <p class="ps-2 mb-0"><strong>8</strong></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error,
-                                    expedita.</p>
-                                <div class="d-flex justify-content-between">
-                                    <p class="fw-bold fst-italic">John Doe</p>
-                                    <div class="d-flex align-items-center">
-                                        <font-awesome-icon icon="fa-regular fa-thumbs-up" />
-                                        <p class="ps-2 mb-0"><strong>8</strong></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+            
         </div>
         <div class="container" v-else>
             <SpinnerWidget />
@@ -233,8 +125,9 @@
 import SectionHeader from '@/components/SectionHeader.vue';
 import SpinnerWidget from '@/components/widgets/SpinnerWidget.vue';
 import { useBookStore } from '@/stores/bookStore';
-import { icon } from '@fortawesome/fontawesome-svg-core';
-import { mapState } from 'pinia';
+import { useAuthStore } from '@/stores/authStore';
+import { useCommentStore } from '@/stores/commentStore';
+import { mapState, mapActions } from 'pinia';
 export default {
     name: "BookDetailView",
     components: {
@@ -244,7 +137,8 @@ export default {
     data() {
         return {
             book: null,
-            loading : true
+            loading : true,
+            commentContent : "",
         }
     },
     //created :metodu içerisinden routuerdaki id ye göre kitap bilgilerini alıp yansıtıyoruz.
@@ -267,8 +161,11 @@ component : BookDetailView
       // Eğer rating tam sayıysa ondalıklı hale getiriyoruz
       return Number.isInteger(this.book.rating) ? this.book.rating.toFixed(1) : this.book.rating;
     },
+    ...mapState(useBookStore, ['selectedBooks']),
+    ...mapState(useAuthStore, ['user']),
     },
     methods: {
+        ...mapActions(useCommentStore, ['addNewComment']),
         goToBackBooks() {
             this.$router.push({ name: "books" }); //router.push ile yönlendirme yapılır. name i books olan route a yönlendirme yapılır.
 
@@ -279,6 +176,27 @@ component : BookDetailView
             this.book = this.selectedBooks(bookId);
             this.loading = false;
         },
+
+        async addComment() {
+          try {
+
+            const bookId = this.$route.params.id;
+            const content = this.commentContent;
+            const userId = this.user.user._id;
+
+            await this.addNewComment(
+                {
+                    bookId,
+                    content,
+                    userId,
+                }
+            )
+
+          } catch (error) {
+            console.log(error,"errorfront");
+            
+          }
+        }
         // async fetchABook() {
         //     const bookId = this.$route.params.id;
         //     const response = await fetch(`http://localhost:4000/api/v1/books/${bookId}`);
@@ -287,9 +205,7 @@ component : BookDetailView
         //     this.loading = false;
         // }
     },
-    computed: {
-        ...mapState(useBookStore, ['selectedBooks']),
-    },
+
 }
 </script>
 

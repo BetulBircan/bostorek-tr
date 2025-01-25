@@ -32,3 +32,8 @@ const bookSchema = new mongoose.Schema(
 const Book = mongoose.model('Book',bookSchema); //model oluşturduk ve Book adında bir model oluşturduk.mongodb collection ile etkileşim kurmamızı sağlar
 
 export default Book;
+
+/*contention issue : ortak olaraak kullanılan bir kaynaktaki veri çakışmasına denk gelir.Farklı kullanıcılar tarafından bir
+kitaba aynı anda yorumlar yapıldığında güncellenecek olan collection sırasında problemler çıkabilir.
+
+*/
