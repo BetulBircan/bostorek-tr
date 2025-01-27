@@ -17,7 +17,6 @@ const authenticateUser = async (req, res, next) => {
 
     const token = tokenParts[1];
 
-    console.log('token',token);
     
 
     try {
@@ -38,9 +37,6 @@ const authenticateUser = async (req, res, next) => {
         
     }
 
-
-
-    console.log('autHeader',autHeader);
     
 }
 

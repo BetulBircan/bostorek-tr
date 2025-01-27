@@ -6,7 +6,6 @@ actions : {
     async updateUserDetails(updateUserData) {
         try {
             const response = await axios.put('http://localhost:4000/api/v1/user/updateUser', updateUserData);
-            console.log(response.data, 'response');
             return response.data;
             //this.users = response.data;
         } catch (error) {

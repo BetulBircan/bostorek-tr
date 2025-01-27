@@ -25,7 +25,6 @@ export const useBookStore = defineStore('bookStore',{
             try {
                 //await new Promise((resolve) => setTimeout(resolve, 3000)); //3 saniye bekletme
                 const response = await axios.get('http://localhost:4000/api/v1/books');
-                console.log(response.data, 'response');
                 
                 this.books = response.data;
                 //this.isLoading = false;
@@ -41,7 +40,6 @@ export const useBookStore = defineStore('bookStore',{
         async fetchBooksByUploader() {
             try {
                 const response = await axios.get('http://localhost:4000/api/v1/books/uploader'); 
-                console.log(response.data, 'response');
                 
                 this.userUploadedBooks = response.data;
             } catch (error) {
@@ -53,7 +51,6 @@ export const useBookStore = defineStore('bookStore',{
         async addNewBook(newBook) { 
             try {
                 const response = await axios.post('http://localhost:4000/api/v1/books', newBook);
-                console.log(response.data, 'response');
                 this.books.push(response.data.book);
                 await this.fetchBooksByUploader();
             } catch (error) {
