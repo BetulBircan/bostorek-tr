@@ -61,7 +61,7 @@ const storedUser = localStorage.getItem('user');
 
 if(storedUser) {
     const userData = JSON.parse(storedUser); //JSON.parse ile JSON stringi JAVASCRİPT OBJESİNE çeviririz.
-    useAuthStore(pinia).user = userData; 
+    useAuthStore(pinia).user = userData.user; 
 
     const token = userData.token;
     if(token) {

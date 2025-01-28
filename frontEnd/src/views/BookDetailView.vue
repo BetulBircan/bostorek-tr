@@ -2,6 +2,7 @@
     <section>
         <div class="container" v-if="!loading">
             <SectionHeader :title="book.title" :text="book.author" />
+
             <div class="d-flex">
                 <font-awesome-icon icon="arrow-left" size="xl" class="mb-2" style="cursor:pointer;color:var(--secondary-color)" @click="goToBackBooks" />
             </div>
@@ -49,19 +50,26 @@
                     </div>
                 </div>
             </div>
-            <hr />
+            <hr v-if="isLoggedIn" />
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <div class="box">
-                        <h3 style="color:var(--primary-color)">Comment The Book</h3>
-                        <form @submit.prevent = "addComment">
-                            <!-- Comment Text Area -->
-                             <div class="mb-3">
-                                <textarea id="comment" class="form-control" rows="4" placeholder="Enter your comment" required v-model="commentContent"></textarea>
-                             </div>
-                             <!-- Submit Button -->
-                              <button type="submit" class="btn btn-primary">Comment</button>
-                        </form>
+                    <div class="box" >
+                        <div v-if="isLoggedIn">
+                            <h3 style="color:var(--primary-color)">Comment The Book</h3>
+                            <form @submit.prevent = "addComment">
+                                <!-- Comment Text Area -->
+                                <div class="mb-3">
+                                    <textarea id="comment" class="form-control" rows="4" placeholder="Enter your comment" required v-model="commentContent"></textarea>
+                                </div>
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn btn-primary">Comment</button>
+                             </form>
+                        </div>
+
+                        <router-link v-else to="/login">
+                            <p style="color: var(--secondary-color);">Log in to leave a comment</p>
+                        </router-link>
+                       
                     </div>
                 </div>
             </div>
@@ -71,16 +79,12 @@
                     <div class="box">
                         <h3 style="color:var(--primary-color)">Comments</h3>
                         <div>
-                            <div class="card mb-4">
+                            <div class="card mb-4" v-for="comment in commentsForBook" :key="comment._id">
                                 <div class="card-body">
-                                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Qui ea eveniet dolores cumque asperiores placeat sunt in quasi delectus odio, nobis quod ullam corporis sit quisquam quaerat quidem, quia odit?
-                                    Autem quaerat nesciunt, minima similique earum quasi tenetur blanditiis, asperiores officiis rem itaque deserunt et ea, fuga suscipit accusamus aut quis aperiam molestias ab aliquam quos totam culpa! Consectetur, nihil!
-                                    Recusandae magni doloremque repellendus harum cupiditate, error non molestiae possimus ipsam deserunt doloribus beatae tempora pariatur quae reprehenderit odit facilis? Unde quas, distinctio est vitae dolor aliquid illum hic exercitationem.
-                                    Hic beatae obcaecati illo aperiam necessitatibus nobis, quaerat voluptate, voluptates at perspiciatis ratione exercitationem voluptatum harum consequuntur quam repudiandae! Animi deleniti officiis sequi culpa commodi doloribus blanditiis, quisquam dicta nisi.
-                                    Modi, atque? Itaque fugiat eius quod pariatur quam exercitationem repellat? Deserunt vitae minima numquam perspiciatis? Earum quae dolores ipsam eaque aspernatur, quia aut, iusto ipsum, dicta eum nisi nam quasi.</p>
+                                    <p>{{ comment.content }}</p>
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex flex-row align-items-center">
-                                            <p class="small mb-0 ms-2">Username</p>
+                                            <p class="small mb-0 ms-2">{{ comment.postedBy.username }}</p>
                                         </div>
                                         <div class="d-flex flex-row align-items-center" style="gap:10px">
                                             <p class="small text-muted mb-0">Upvote?</p>
@@ -90,7 +94,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card mb-4">
+                            <!-- <div class="card mb-4">
                                 <div class="card-body">
                                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum blanditiis nihil quibusdam quos voluptates, ipsum earum. Laudantium mollitia culpa nemo dolor labore laboriosam iste velit ullam autem rerum, placeat necessitatibus.
                                     Dicta, dolorum neque ipsum soluta placeat quas est alias, velit expedita eveniet nostrum quos id nulla fugiat eum excepturi. Voluptates temporibus, odio laborum perspiciatis natus aspernatur provident earum at et?
@@ -108,7 +112,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -144,6 +148,7 @@ export default {
     //created :metodu içerisinden routuerdaki id ye göre kitap bilgilerini alıp yansıtıyoruz.
     created() {
         this.selectBook();
+        this.fetchCommentsForBook(this.$route.params.id);
         /*routerdaki parametreyi alır
          {
 path : '/books/:id',
@@ -162,10 +167,11 @@ component : BookDetailView
       return Number.isInteger(this.book.rating) ? this.book.rating.toFixed(1) : this.book.rating;
     },
     ...mapState(useBookStore, ['selectedBooks']),
-    ...mapState(useAuthStore, ['user']),
+    ...mapState(useAuthStore, ['user', 'isLoggedIn']),
+    ...mapState(useCommentStore, ['commentsForBook']),
     },
     methods: {
-        ...mapActions(useCommentStore, ['addNewComment']),
+        ...mapActions(useCommentStore, ['addNewComment', 'fetchCommentsForBook']),
         goToBackBooks() {
             this.$router.push({ name: "books" }); //router.push ile yönlendirme yapılır. name i books olan route a yönlendirme yapılır.
 
@@ -182,7 +188,7 @@ component : BookDetailView
 
             const bookId = this.$route.params.id;
             const content = this.commentContent;
-            const userId = this.user.user._id;
+            const userId = this.user._id;
 
             await this.addNewComment(
                 {
@@ -191,6 +197,9 @@ component : BookDetailView
                     userId,
                 }
             )
+
+            this.commentContent = "";
+            await this.fetchCommentsForBook(this.$route.params.id);
 
           } catch (error) {
             console.log(error,"errorfront");

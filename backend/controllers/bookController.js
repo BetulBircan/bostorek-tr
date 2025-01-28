@@ -23,7 +23,6 @@ const getBooksByUploader = async (req, res) => {
 
         const books = await Book.find({ userId: uploaderId }); //Book modelini kullanarak veritabanından userId si uploaderId olan tüm dökümanları çektik.
         res.status(200).json(books); //tüm dökümanları json formatında geri döndürdük.
-        console.log("Books : ", books);
         
 
     } catch (error) {
