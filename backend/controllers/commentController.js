@@ -1,4 +1,5 @@
 import Comment from "../models/Comment.js";
+import { findDocumentById } from "../utils/index.js";
 
 const createAComment = async (req, res) => {
     try {
@@ -45,4 +46,78 @@ const getCommentsForBook = async (req, res) => {
     }
 };
 
-export { createAComment, getCommentsForBook };
+const getCommentsByUser = async (req, res) => {
+    try {
+        const {id} = req.params;
+
+    const comments = await Comment.find({postedBy: id}).populate('book');
+
+    return res.status(201).json({
+        message: 'Comments by user fetched', comments
+    });
+    } catch (error) {
+        console.error("Error at getCommentsByUser", error);
+        return res.status(500).json({
+            message: 'Internal Server error'
+        });
+    }
+}
+
+const editAComment = async (req, res) => {
+    try {
+        console.log(req,"req");
+        console.log(req.body,"req.body");
+        console.log(res,"res");
+        
+        const {id} = req.params;
+        const {content} = req.body;
+
+        const comment = await findDocumentById(Comment, id, res);
+
+        if(!comment) return;
+
+        comment.content = content || comment.content;
+
+        await comment.save();
+
+        res.status(201).json({
+            message: 'Comment edited successfully', 
+            comment
+        });
+
+  
+       
+       
+        
+    } catch (error) {
+        console.error("Error at editAComment", error);
+        return res.status(500).json({
+            message: 'Internal Server error'
+        });
+        
+    }
+};
+
+const deleteAComment = async (req, res) => {
+    try {
+        const {id} = req.params;
+
+        const comment = await findDocumentById(Comment, id, res);
+
+        if(!comment) return;
+
+        await comment.deleteOne();
+
+        return res.status(204).json({
+            message: 'Comment deleted successfully'
+        });
+    } catch (error) {
+        console.error("Error at deleteAComment", error);
+        return res.status(500).json({
+            message: 'Internal Server error'
+        });
+        
+    }
+}
+
+export { createAComment, getCommentsForBook, getCommentsByUser, editAComment, deleteAComment };
