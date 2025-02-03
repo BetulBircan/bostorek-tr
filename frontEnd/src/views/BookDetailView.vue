@@ -2,7 +2,6 @@
     <section>
         <div class="container" v-if="!loading">
             <SectionHeader :title="book.title" :text="book.author" />
-
             <div class="d-flex">
                 <font-awesome-icon icon="arrow-left" size="xl" class="mb-2" style="cursor:pointer;color:var(--secondary-color)" @click="goToBackBooks" />
             </div>
@@ -24,7 +23,7 @@
                             </div>
                             <div class="row border-bottom pb-2">
                                 <div class="col-lg-6"><strong>Rating</strong></div>
-                                <div class="col-lg-6">8.2 - (23 rates)</div>
+                                <div class="col-lg-6">{{ averageRating }} - ({{ ratingCount }} rates)</div>
                             </div>
                             <div class="row border-bottom pb-2">
                                 <div class="col-lg-6"><strong>Upload Date</strong></div>
@@ -37,16 +36,27 @@
             <div class="row mt-3">
                 <div class="col-md-6">
                     <div class="box">
-                        <h3 style="color:var(--primary-color)">Rate The Book</h3>
-                        <form>
-                            <!-- Rating Input -->
-                             <div class="mb-3">
-                                <input type="number" id="rating" class="form-control w-50" min="1" max="10" placeholder="Rate (1-10)" required/>
-                             </div>
+                        <div v-if="isLoggedIn">
+                            <div v-if="!isUserAlreadyRated">
+                                <h3 style="color:var(--primary-color)">Rate The Book</h3>
+                                <form @submit.prevent="addRate">
+                                    <!-- Rating Input -->
+                                    <div class="mb-3">
+                                        <input type="number" id="rating" class="form-control w-50" min="1" max="10" placeholder="Rate (1-10)" v-model="userRate" required/>
+                                    </div>
 
-                             <!-- Submit Button -->
-                              <button type="submit" class="btn btn-primary">Rate</button>
-                        </form>
+                                    <!-- Submit Button -->
+                                    <button type="submit" class="btn btn-primary">Rate</button>
+                                </form>
+                            </div>
+                            <div v-else>
+                                Your rate : {{ userRating }}
+                            </div>
+                        </div>
+
+                        <router-link v-else to="/login">
+                            <p style="color: var(--secondary-color);">Log in to leave a rate the book</p>
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -131,6 +141,7 @@ import SpinnerWidget from '@/components/widgets/SpinnerWidget.vue';
 import { useBookStore } from '@/stores/bookStore';
 import { useAuthStore } from '@/stores/authStore';
 import { useCommentStore } from '@/stores/commentStore';
+import { useRatingStore } from '@/stores/ratingStore';
 import { mapState, mapActions } from 'pinia';
 export default {
     name: "BookDetailView",
@@ -143,12 +154,14 @@ export default {
             book: null,
             loading : true,
             commentContent : "",
+            userRate : null
         }
     },
     //created :metodu içerisinden routuerdaki id ye göre kitap bilgilerini alıp yansıtıyoruz.
     created() {
         this.selectBook();
         this.fetchCommentsForBook(this.$route.params.id);
+        this.fetchRatingsForBook(this.$route.params.id);
         /*routerdaki parametreyi alır
          {
 path : '/books/:id',
@@ -165,13 +178,54 @@ component : BookDetailView
         formattedRating() {
       // Eğer rating tam sayıysa ondalıklı hale getiriyoruz
       return Number.isInteger(this.book.rating) ? this.book.rating.toFixed(1) : this.book.rating;
-    },
-    ...mapState(useBookStore, ['selectedBooks']),
-    ...mapState(useAuthStore, ['user', 'isLoggedIn']),
-    ...mapState(useCommentStore, ['commentsForBook']),
+        },
+        ...mapState(useBookStore, ['selectedBooks']),
+        ...mapState(useAuthStore, ['user', 'isLoggedIn']),
+        ...mapState(useCommentStore, ['commentsForBook']),
+        ...mapState(useRatingStore, ['ratingsForBook']),
+
+        //verilen oyların ortalamasını alır
+        averageRating() {
+            if(this.ratingsForBook && this.ratingsForBook.length > 0) {
+                                                        //reduce fonksiyonu ile array içerisindeki değerleri toplarız
+                const totalRating = this.ratingsForBook.reduce((sum, rating) => sum + rating.rate, 0);
+                return (totalRating / this.ratingsForBook.length).toFixed(1);
+
+            }
+            else {
+                return 0;
+            }
+        },
+
+        ratingCount() {
+            return this.ratingsForBook ?  this.ratingsForBook.length : 0;
+        },
+
+        //kullanıcı daha önce oylama yapmış mı kontrol eder
+        isUserAlreadyRated() {
+            if(!this.user) {
+                return false;
+            }
+
+            else if(this.ratingsForBook && this.ratingsForBook.length > 0) {
+                return this.ratingsForBook.some(rating => rating.ratedBy._id === this.user._id);
+            }
+
+        },
+
+        //kullanıcının verdiği oyu alır
+        userRating() {
+            if(this.ratingsForBook) {
+                const userRatingObj = this.ratingsForBook.find(rating => rating.ratedBy._id === this.user._id);
+
+            return userRatingObj ? userRatingObj.rate : null;
+            }
+            
+        }
     },
     methods: {
         ...mapActions(useCommentStore, ['addNewComment', 'fetchCommentsForBook']),
+        ...mapActions(useRatingStore, ['addNewRate', 'fetchRatingsForBook']),
         goToBackBooks() {
             this.$router.push({ name: "books" }); //router.push ile yönlendirme yapılır. name i books olan route a yönlendirme yapılır.
 
@@ -205,15 +259,32 @@ component : BookDetailView
             console.log(error,"errorfront");
             
           }
+        },
+
+        async addRate() {
+            try {
+                const bookId = this.$route.params.id;
+                const rate = this.userRate;
+                const userId = this.user._id;
+
+                await this.addNewRate(
+                    {
+                        rate,
+                        bookId,
+                        userId,
+                    }
+                )
+
+                this.userRate = null;
+
+                await this.fetchRatingsForBook(this.$route.params.id);
+            } catch (error) {
+                console.error(error);
+            }
         }
-        // async fetchABook() {
-        //     const bookId = this.$route.params.id;
-        //     const response = await fetch(`http://localhost:4000/api/v1/books/${bookId}`);
-        //     const data = await response.json();
-        //     this.book = data;
-        //     this.loading = false;
-        // }
     },
+
+    
 
 }
 </script>
