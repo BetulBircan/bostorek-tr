@@ -26,6 +26,25 @@ const createAComment = async (req, res) => {
     }
 };
 
+const getAllComments = async (req, res) => {
+    try {
+        const comments = await Comment.find().populate({
+            path : 'postedBy', //postedBy ı populate edicek
+            select : 'username', //sadece username i getirecek
+        })
+        res.status(200).json({
+            message: 'All comments fetched', 
+            comments
+        })
+    } catch (error) {
+        console.error("Error at getAllComments", error);
+        return res.status(500).json({
+            message: 'Internal Server error'
+        });
+        
+    }
+};
+
 const getCommentsForBook = async (req, res) => {
     try {
 
@@ -120,4 +139,4 @@ const deleteAComment = async (req, res) => {
     }
 }
 
-export { createAComment, getCommentsForBook, getCommentsByUser, editAComment, deleteAComment };
+export { createAComment, getAllComments, getCommentsForBook, getCommentsByUser, editAComment, deleteAComment };

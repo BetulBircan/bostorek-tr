@@ -11,6 +11,7 @@ import router from "@/router/index.js";
 import { createPinia } from 'pinia';
 import { useBookStore } from '@/stores/bookStore.js';
 import { useAuthStore } from '@/stores/authStore.js';
+import { useCommentStore } from '@/stores/commentStore.js';
 import axios from 'axios';
 
 /* import the fontawesome core */
@@ -70,19 +71,33 @@ if(storedUser) {
 }
 
 const bookStore = useBookStore(pinia);
+const commentStore = useCommentStore(pinia);
 
 //axios ınterceptor ---> Eğer hata varsa ve bu hatanın kodu 401 ise toast mesajı göster (token ınınz expire oldu  logine yönlendiriliyorsunuz) yaz ve login e yönlendr çıkış işlemi yap.
  
-//uygulama başladığında kitapları çekecek
-bookStore.fetchBooks().then(() => {
+const init = async () => { 
+    await Promise.all([bookStore.fetchBooks(), commentStore.fetchComments()]);
     const app = createApp(App);
     app
     .use(pinia)
     .use(router)
     .component('font-awesome-icon', FontAwesomeIcon)
     .use(Toast)
-    .mount("#app");
-});
+    .mount("#app")
+}
+
+init();
+
+//uygulama başladığında kitapları çekecek ama proje büyüyünce bu kısım sağlıklı olmayabilir.
+// bookStore.fetchBooks().then(() => {
+//     const app = createApp(App);
+//     app
+//     .use(pinia)
+//     .use(router)
+//     .component('font-awesome-icon', FontAwesomeIcon)
+//     .use(Toast)
+//     .mount("#app");
+// });
 
 
 // app.use(router);

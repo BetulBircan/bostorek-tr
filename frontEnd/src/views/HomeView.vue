@@ -10,16 +10,12 @@
                 <!-- List Group -->
                 <div class="col-md-4">
                     <div class="list-group">
-                        <button type="button" 
-                        class="list-group-item list-group-item-action" :class="{active: selectedFilter === 'latest'}"
-                        @click="selectFilter('latest')"
-                        >
+                        <button type="button" class="list-group-item list-group-item-action"
+                            :class="{ active: selectedFilter === 'latest' }" @click="selectFilter('latest')">
                             Latest Books
                         </button>
-                        <button 
-                        type="button" class="list-group-item list-group-item-action" :class="{active: selectedFilter === 'best'}"
-                         @click="selectFilter('best')"
-                        >
+                        <button type="button" class="list-group-item list-group-item-action"
+                            :class="{ active: selectedFilter === 'best' }" @click="selectFilter('best')">
                             Best Ratings
                         </button>
                     </div>
@@ -32,32 +28,27 @@
                         </div>
                     </div>
                     <div v-else class="accordion">
-                        <div class="accordion-item" v-for="(book,index) in filteredBooks" :key="index">
+                        <div class="accordion-item" v-for="(book, index) in filteredBooks" :key="index">
                             <h2 class="accordion-header">
-                                <button 
-                                    class="accordion-button" type="button"
-                                    :class="{collapsed : openAccordionIndex !== index}"
-                                    @click="toggleAccordion(index)"
-                                    >
-                                   <strong>{{ book.title }} - {{ book.author }}</strong>
+                                <button class="accordion-button" type="button"
+                                    :class="{ collapsed: openAccordionIndex !== index }" @click="toggleAccordion(index)">
+                                    <strong>{{ book.title }} - {{ book.author }}</strong>
                                 </button>
                             </h2>
-                            <div 
-                            class="accordion-collapse collapse "
-                            :class="{show : openAccordionIndex === index}"
-                            >
+                            <div class="accordion-collapse collapse " :class="{ show: openAccordionIndex === index }">
                                 <div class="accordion-body">
-                                   <div class="row">
-                                    <div class="col-md-4">
-                                        <img src="../assets/images/b1.jpg" class="img-fluid">
-                                    </div>
-                                    <div class="col-md-8 d-flex flex-column justify-content-center">
-                                        <p>{{ book.description }}</p>
-                                        <div class="badge align-self-start" style="background-color: var(--secondary-color);">
-                                            {{ formattedRating(book.rating) }}
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <img src="../assets/images/b1.jpg" class="img-fluid">
+                                        </div>
+                                        <div class="col-md-8 d-flex flex-column justify-content-center">
+                                            <p>{{ book.description }}</p>
+                                            <div class="badge align-self-start"
+                                                style="background-color: var(--secondary-color);">
+                                                {{ formattedRating(book.rating) }}
+                                            </div>
                                         </div>
                                     </div>
-                                   </div>
                                 </div>
                             </div>
                         </div>
@@ -65,6 +56,34 @@
                 </div>
             </div>
 
+        </div>
+    </section>
+
+    <section class="py-5" style="background-color: #f5f6f9;">
+        <div class="container">
+            <SectionHeader title="Latest Comments"
+                text="We declare long prop names using camelCase bexause tihis awoids" />
+            <div class="row flex justify-content-center">
+                <div class="col-md-6" v-for="(comment) in prepared4Comments" :key="comment._id">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex flex-start align-items-center">
+                                <img class="rounded-circle shadow-1-strong me-3" src="../assets/images/c1.jpg"
+                                    alt="avatar" width="60" height="60" />
+                                <div>
+                                    <h6 class="fw-6 text-primary mb-1">{{ comment.title }}</h6>
+                                    <p class="text-muted small mb-0">{{ comment.postedBy.username }} - {{ comment.createdAt }}</p>
+                                </div>
+                            </div>
+
+                            <p class="mt-3 mb-4 pb-2">
+                                {{ comment.content }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
         </div>
     </section>
     <!-- directive örneği -->
@@ -82,6 +101,7 @@ import hero_2 from '@/assets/images/hero_2.jpg';
 import hero_3 from '@/assets/images/hero_3.jpg';
 import SectionHeader from '@/components/SectionHeader.vue';
 import { useBookStore } from '@/stores/bookStore';
+import { useCommentStore } from '@/stores/commentStore';
 import { mapState, mapActions } from 'pinia';
 import LoadingSpinner from '@/components/widgets/SpinnerWidget.vue';
 import CarouselWidget from '@/components/widgets/CarouselWidget.vue';
@@ -102,9 +122,9 @@ export default {
                 { imageUrl: hero_3, subtitle: 'Fraternite', title: 'Neque Porro Quisquam Est', description: 'Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.' }
             ],
             // books: [],
-            bookStore : useBookStore(),
+            bookStore: useBookStore(),
             selectedFilter: 'latest',
-            openAccordionIndex : 0,
+            openAccordionIndex: 0,
             //    imageSrc : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2Tn86tojVvJkJ5f7vRa16CTtrSaMUgBBbYQ&s" ,
             //    imageAlt : "DUMAN",
             //    url : "/books",
@@ -118,12 +138,12 @@ export default {
     //     this.fetchBooks();
     // },
 
-    methods : {
+    methods: {
         // ...mapActions(useBookStore, ['fetchBooks']), //store dan books state ini çekiyoruz fakat mainçjs de yapıypruz zaten bunu
         selectFilter(filter) {
             this.selectedFilter = filter;
         },
-        
+
         toggleAccordion(index) {
             if (this.openAccordionIndex === index) {
                 this.openAccordionIndex = -1;
@@ -132,21 +152,42 @@ export default {
             }
         },
         formattedRating(rating) {
-      // Eğer rating tam sayıysa ondalıklı hale getiriyoruz
-      return Number.isInteger(rating) ? rating.toFixed(1) : rating;
+            // Eğer rating tam sayıysa ondalıklı hale getiriyoruz
+            return Number.isInteger(rating) ? rating.toFixed(1) : rating;
+        },
     },
-    },
-    computed : {
-        ...mapState(useBookStore, ['books','isLoading']), //store dan books state ini çekiyoruz  
+    computed: {
+        ...mapState(useBookStore, ['books', 'isLoading']), //store dan books state ini çekiyoruz  
+        ...mapState(useCommentStore, ['comments']), //store dan comments state ini çekiyoruz
         filteredBooks() {
             const copiedBooks = [...this.books];
             if (this.selectedFilter === 'latest') {
-                return copiedBooks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0,4); //en yeni kitaplar en başta olacak şekilde sıralıyoruz
+                return copiedBooks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 4); //en yeni kitaplar en başta olacak şekilde sıralıyoruz
             } else if (this.selectedFilter === 'best') {
-                return copiedBooks.sort((a, b) => b.rating - a.rating).slice(0,4); //en yüksek ratinge sahip kitaplar en başta olacak şekilde sıralıyoruz
-            }   
+                return copiedBooks.sort((a, b) => b.rating - a.rating).slice(0, 4); //en yüksek ratinge sahip kitaplar en başta olacak şekilde sıralıyoruz
+            }
         },
-       
+
+        prepared4Comments() {
+            const latest4Comments = this.comments
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            .slice(0, 4);
+
+            return latest4Comments.map(comment => {
+                const correspondingBook = this.books.find((book) => book._id === comment.book);
+                if(correspondingBook) {
+                    return {
+                    ...comment,
+                    title : correspondingBook.title
+                    
+                    }   
+                }
+
+                return comment;
+               
+            });
+        }
+
     }
 }
 </script>
@@ -154,7 +195,7 @@ export default {
 <style scoped>
 .list-group-item.active {
     background-color: var(--primary-color);
-    border-color: var(--primary-color);   
+    border-color: var(--primary-color);
 }
 
 .accordion-button {

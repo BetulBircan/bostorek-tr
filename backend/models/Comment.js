@@ -16,7 +16,14 @@ const commentSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true,
-        }
+        },
+        upvotes : [
+            {
+                type : mongoose.Schema.Types.ObjectId,
+                ref : 'User'
+
+            }
+        ]
 
     },
     {timestamps : true} //createdAt ve updatedAt alanlarını otomatik olarak ekler

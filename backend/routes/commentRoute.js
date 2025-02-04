@@ -17,7 +17,8 @@ router.route('/:id')
 
 router
 .route('/')
-.post(authMiddleware.authenticateUser, commentController.createAComment);
+.post(authMiddleware.authenticateUser, commentController.createAComment)
+.get(commentController.getAllComments);
 
 
 export default router;

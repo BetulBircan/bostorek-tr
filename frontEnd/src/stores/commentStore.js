@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
+
 export const useCommentStore = defineStore('commentStore',{
     state : () => ({
         comments : [],
@@ -11,15 +12,31 @@ export const useCommentStore = defineStore('commentStore',{
     actions : {
         async addNewComment(newComment){ 
             try {
-  
-                const response = await axios.post('http://localhost:4000/api/v1/comments', newComment);
 
-                this.comments.push(response.data.comment);
+                await axios.post('http://localhost:4000/api/v1/comments', newComment);
+
+                await this.fetchComments();
+  
+                // const response = await axios.post('http://localhost:4000/api/v1/comments', newComment);
+
+                // this.comments.push(response.data.comment);
                 
             } catch (error) {
            
               throw error.response.data;
                 
+            }
+        },
+
+        async fetchComments() {
+            try {
+                const response = await axios.get('http://localhost:4000/api/v1/comments');
+                
+                console.log(response.data.comments,"response.data.comments");
+
+                this.comments = response.data.comments;
+            } catch (error) {
+                console.error(error);
             }
         },
 
