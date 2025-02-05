@@ -161,7 +161,6 @@ export default {
     created() {
         this.selectBook();
         this.fetchCommentsForBook(this.$route.params.id);
-        this.fetchRatingsForBook(this.$route.params.id);
         /*routerdaki parametreyi alır
          {
 path : '/books/:id',

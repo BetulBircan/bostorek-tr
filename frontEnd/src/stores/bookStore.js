@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { useRatingStore } from "./ratingStore";
 
 export const useBookStore = defineStore('bookStore',{
     //state, action, getters buraya yazılacak
@@ -11,9 +12,21 @@ export const useBookStore = defineStore('bookStore',{
 
     //getters : store üzerindeki state i okuyup işleyip başka bir değer döndüren fonksiyonlardır.
     getters : {
-        selectedBooks(state) {
+        selectedBooks : (state) => {
             return (id) => state.books.find(book => book._id === id);
-        }
+        },
+
+        latest4Books : (state) => {
+            return state.books.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0,4)
+        },
+        bestRatings4Books : (state) => {
+            const sortedBooks =  state.books.sort((a,b) => {
+            const averageRatingA = a.ratings.reduce((sum, rating) => sum + rating.rate, 0) / (a.ratings.length || 1);
+            const averageRatingB = b.ratings.reduce((sum, rating) => sum + rating.rate, 0) / (b.ratings.length || 1);
+            return averageRatingB - averageRatingA;
+            })
+            return sortedBooks.slice(0,4);
+        },
     },
 
     //actions : store üzerinde state i manipüle edecek şekilde değiştirebilecek fonksiyonlardır. asenkron işlemler yapılabilir.
@@ -27,6 +40,9 @@ export const useBookStore = defineStore('bookStore',{
                 const response = await axios.get('http://localhost:4000/api/v1/books');
                 
                 this.books = response.data;
+
+                await this.fetchRatingsForBooks();
+                
                 //this.isLoading = false;
 
             } catch (error) {
@@ -35,6 +51,22 @@ export const useBookStore = defineStore('bookStore',{
             finally {
                 this.isLoading = false;
             }
+        },
+
+        async fetchRatingsForBooks() {
+            const ratingStore = useRatingStore();
+            
+           await Promise.all(
+            this.books.map( async ( book) => {
+                try {
+                    await ratingStore.fetchRatingsForBook(book._id);
+
+                    book.ratings = ratingStore.ratingsForBook;
+                } catch (error) {
+                    console.error("Error at fetcRatingsForBooks", error)
+                }
+            })
+           )
         },
 
         async fetchBooksByUploader() {

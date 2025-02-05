@@ -157,14 +157,15 @@ export default {
         },
     },
     computed: {
-        ...mapState(useBookStore, ['books', 'isLoading']), //store dan books state ini çekiyoruz  
+        ...mapState(useBookStore, ['books', 'isLoading', 'latest4Books', 'bestRatings4Books']), //store dan books state ini çekiyoruz  
         ...mapState(useCommentStore, ['comments']), //store dan comments state ini çekiyoruz
         filteredBooks() {
-            const copiedBooks = [...this.books];
+            //const copiedBooks = [...this.books];
             if (this.selectedFilter === 'latest') {
-                return copiedBooks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 4); //en yeni kitaplar en başta olacak şekilde sıralıyoruz
+                return this.latest4Books //en yeni kitaplar en başta olacak şekilde sıralıyoruz
             } else if (this.selectedFilter === 'best') {
-                return copiedBooks.sort((a, b) => b.rating - a.rating).slice(0, 4); //en yüksek ratinge sahip kitaplar en başta olacak şekilde sıralıyoruz
+                return this.bestRatings4Books //en yüksek ratinge sahip kitaplar en başta olacak şekilde sıralıyoruz
+                
             }
         },
 

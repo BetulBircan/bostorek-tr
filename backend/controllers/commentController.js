@@ -84,10 +84,7 @@ const getCommentsByUser = async (req, res) => {
 
 const editAComment = async (req, res) => {
     try {
-        console.log(req,"req");
-        console.log(req.body,"req.body");
-        console.log(res,"res");
-        
+    
         const {id} = req.params;
         const {content} = req.body;
 

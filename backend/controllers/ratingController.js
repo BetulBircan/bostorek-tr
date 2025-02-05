@@ -28,9 +28,7 @@ const createARate = async (req, res) => {
 const getRatingsForBook = async (req, res) => {
     try {
 
-        const { id } = req.params;
-        console.log(id);
-        
+        const { id } = req.params;        
 
         const ratings = await Rating.find({book: id}).populate('ratedBy');
 

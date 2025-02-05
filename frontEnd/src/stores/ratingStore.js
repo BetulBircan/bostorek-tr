@@ -13,8 +13,6 @@ export const useRatingStore = defineStore('ratingStore',{
             try {
   
                 const response = await axios.post('http://localhost:4000/api/v1/ratings', newRate);
-                console.log(response.data);
-                
 
                 this.ratings.push(response.data.rating);
                 
@@ -29,6 +27,7 @@ export const useRatingStore = defineStore('ratingStore',{
             try {
                 const response = await axios.get(`http://localhost:4000/api/v1/ratings/book/${bookId}`);
                 this.ratingsForBook = response.data.ratings;
+                
             } catch (error) {
                 console.error(error);
                 

@@ -127,7 +127,6 @@
               
             },
             openEditModal(comment) {
-                console.log(comment,"comment");
                 
                 this.editCommentId = comment._id;
                 this.commentData.content = comment.content;
@@ -141,7 +140,6 @@
             },
 
             openDeleteModal(comment) {
-                console.log(comment,"comment");
                 
                 this.deleteCommentId = comment._id;
                 this.deleteModal.show();

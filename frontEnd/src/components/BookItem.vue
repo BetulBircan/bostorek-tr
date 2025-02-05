@@ -9,12 +9,12 @@
             <p class="card-text">{{ truncatedDescription }}</p>
             <div class="d-flex justify-content-between align-items-center">
                 <a href="#" class="card-link">Read More</a>
-                <p style="background-color: var(--primary-color);" class="py-1 px-2 text-white badge mb-0">{{ book.updatedAt }}</p>
+                <p style="background-color: var(--primary-color);" class="py-1 px-2 text-white badge mb-0">{{ book.createdAt }}</p>
             </div>
         </div>
         <span
         :class="ratingBadgeClass"
-            class="position-absolute top-0 start-100 translate-middle p-2 text-light rounded-circle border border-2 border-light">{{ formattedRating}}</span>
+            class="position-absolute top-0 start-100 translate-middle p-2 text-light rounded-circle border border-2 border-light custom-center">{{ averageRating}}</span>
     </div>
 </template>
 
@@ -30,11 +30,23 @@ export default {
         }
     },
     computed : {
+        averageRating() {
+            if(this.book.ratings && this.book.ratings.length > 0) {
+                const totalRating = this.book.ratings.reduce((sum, rating) => sum + rating.rate, 0);
+
+                return (totalRating / this.book.ratings.length).toFixed(1);
+            }
+            else {
+                return '-';
+            }
+        },
+
         ratingBadgeClass() {
-            if(this.book.rating > 7) {
+
+            if(this.averageRating > 7) {
                 return 'bg-success';
             }
-            else if(this.book.rating > 4) {
+            else if(this.averageRating > 4 || this.averageRating === '-') {
                 return 'bg-warning';
             }
             else {
@@ -42,10 +54,8 @@ export default {
 
             }
         },
-        formattedRating() {
-      // Eğer rating tam sayıysa ondalıklı hale getiriyoruz
-      return Number.isInteger(this.book.rating) ? this.book.rating.toFixed(1) : this.book.rating;
-    },
+       
+        
        truncatedDescription() {
           if(this.book.description.length > 80) {
                 return this.book.description.slice(0, 80) + '...';
@@ -61,5 +71,13 @@ export default {
 <style scoped>
 .card-text {
    min-height: 70px;
+}
+
+.custom-center {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>
