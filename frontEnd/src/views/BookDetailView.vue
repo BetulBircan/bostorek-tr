@@ -97,9 +97,38 @@
                                             <p class="small mb-0 ms-2">{{ comment.postedBy.username }}</p>
                                         </div>
                                         <div class="d-flex flex-row align-items-center" style="gap:10px">
+                                            <div v-if="!user" class="d-flex flex-row align-items-center" style="gap : 10px">
+                                                <router-link  to="/login">
+                                                    <p class="small mb-0" style="color: var(--secondary-color);">Log in for upvote !</p>
+                                                </router-link>
+                                                <font-awesome-icon :icon="['fas', 'thumbs-up']" style="color:var(--secondary-color)"/>
+                                            </div>
+                                            
+                                            <div v-else-if="!comment.upvotes.includes(user._id) && comment.postedBy._id !== user._id " 
+                                            class="d-flex flex-row align-items-center" 
+                                            style="gap:10px; cursor: pointer; " @click="upvote(comment._id)">
+                                                <p class="small mb-0">Upvote?</p>
+                                                <font-awesome-icon :icon="['far', 'thumbs-up']" />
+                                            </div>
+                                            
+                                            <div v-else-if="comment.upvotes.includes(user._id) && comment.postedBy._id !== user._id " 
+                                            class="d-flex flex-row align-items-center" 
+                                            style="gap:10px; cursor: pointer; " @click="downvote(comment._id)">
+                                                <p class="small mb-0">Upvoted</p>
+                                                <font-awesome-icon :icon="['fas', 'thumbs-up']" style="color: var(--secondary-color)"/>
+                                            </div>
+                                            
+                                            <div v-else class="d-flex flex-row align-items-center" style="gap : 10px">
+                                                <p class="small mb-0">You can't upvote for your comment</p>
+                                                <font-awesome-icon :icon="['fas', 'thumbs-up']" style="color: var(--secondary-color);"/>
+                                            </div>
+
+                                            <p class="small text-muted mb-0">{{ comment.upvotes.length }}</p>
+
+                                            <!-- 
                                             <p class="small text-muted mb-0">Upvote?</p>
                                             <font-awesome-icon :icon="['far', 'thumbs-up']" />
-                                            <p class="small text-muted mb-0">3</p>
+                                            <p class="small text-muted mb-0">3</p> -->
                                         </div>
                                     </div>
                                 </div>
@@ -161,6 +190,7 @@ export default {
     created() {
         this.selectBook();
         this.fetchCommentsForBook(this.$route.params.id);
+        this.fetchRatingsForBook(this.$route.params.id);
         /*routerdaki parametreyi alır
          {
 path : '/books/:id',
@@ -223,12 +253,31 @@ component : BookDetailView
         }
     },
     methods: {
-        ...mapActions(useCommentStore, ['addNewComment', 'fetchCommentsForBook']),
+        ...mapActions(useCommentStore, ['addNewComment', 'fetchCommentsForBook', 'upvoteComment', 'downvoteComment']),
         ...mapActions(useRatingStore, ['addNewRate', 'fetchRatingsForBook']),
+
+        async upvote(commentId) {
+            try {
+                await this.upvoteComment(commentId);
+
+                await this.fetchCommentsForBook(this.$route.params.id);
+            } catch (error) {
+                
+            }
+        },
+
+        async downvote(commentId) {
+            try {
+                await this.downvoteComment(commentId);
+
+                await this.fetchCommentsForBook(this.$route.params.id);
+            } catch (error) {
+                
+            }
+        },
+
         goToBackBooks() {
             this.$router.push({ name: "books" }); //router.push ile yönlendirme yapılır. name i books olan route a yönlendirme yapılır.
-
-
         },
         selectBook() {
             const bookId = this.$route.params.id;

@@ -14,6 +14,12 @@ router.route('/:id')
 .put(authMiddleware.authenticateUser, commentController.editAComment)
 .delete(authMiddleware.authenticateUser, commentController.deleteAComment);
 
+router.route('/:id/upvote')
+.post(authMiddleware.authenticateUser, commentController.upvoteAComment);
+
+router.route('/:id/downvote')
+.post(authMiddleware.authenticateUser, commentController.downvoteAComment);
+
 
 router
 .route('/')

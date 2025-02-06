@@ -83,6 +83,40 @@ export const useCommentStore = defineStore('commentStore',{
             } catch (error) {
                 throw error.response.data;
             }
+        },
+
+        async upvoteComment(commentId) {
+            try {
+                const response = await axios.post(`http://localhost:4000/api/v1/comments/${commentId}/upvote`);
+
+                const updatedCommentData = response.data.comment;
+
+                const commentIndex = this.comments.findIndex(comment => comment._id === updatedCommentData._id);
+                if(commentIndex !== -1) {
+                    
+                    this.comments[commentIndex] = updatedCommentData;
+                }
+                
+            } catch (error) {
+                
+            }
+        },
+
+        async downvoteComment(commentId) {
+            try {
+                const response = await axios.post(`http://localhost:4000/api/v1/comments/${commentId}/downvote`);
+
+                const updatedCommentData = response.data.comment;
+
+                const commentIndex = this.comments.findIndex(comment => comment._id === updatedCommentData._id);
+                if(commentIndex !== -1) {
+                    
+                    this.comments[commentIndex] = updatedCommentData;
+                }
+                
+            } catch (error) {
+                
+            }
         }
 
     }
