@@ -75,8 +75,8 @@ export default {
 
 
 <!-- yeni  script hali, composition api, script tagının içerisine  -->
- <script setup>
- import DashboardGeneral from '@/components/dashboard/DashboardGeneral.vue';
+<script setup>
+import DashboardGeneral from '@/components/dashboard/DashboardGeneral.vue';
 import DashboardBooks from '@/components/dashboard/DashboardBooks.vue';
 import DashboardComments from '@/components/dashboard/DashboardComments.vue';
 import { ref } from 'vue';

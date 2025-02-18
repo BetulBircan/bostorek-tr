@@ -60,7 +60,66 @@
     </section>
 </template>
 
-<script>
+<script setup>
+import { useAuthStore } from '@/stores/authStore';
+import { useToast } from "vue-toastification";
+import { ref, reactive, computed } from 'vue';
+import  { useRouter } from 'vue-router';
+
+
+
+const formData = reactive({
+    email: "",
+    password: "",
+});
+
+const showEmailWarningMessage = ref(false);
+const showPasswordWarningMessage = ref(false);
+const notFoundEmail = ref(null);
+const isPasswordMatch = ref(true);
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+const submitForm = async () => {
+    try {
+        await authStore.login(formData);
+        const toast = useToast();
+        toast.success('You will be redirect to dashboard page', {
+            position: "top-right",
+            timeout: 3500,
+            closeOnClick: true,
+            closeButton: "button",
+            icon: true,
+        });
+
+        setTimeout(() => {
+            router.push('/dashboard');
+        }, 2000);
+    } catch (data) {
+        const { error } = data;
+
+        if (error === "User not found!") {
+            notFoundEmail.value = formData.email;
+        } else if (error === "User not found!") {
+            isPasswordMatch.value = false;
+        }
+    }
+};
+
+const isFormValid = computed(() => isEmailValid.value && isPasswordValid.value);
+
+const isEmailValid = computed(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
+
+const isPasswordValid = computed(() => formData.password.length >= 4 && formData.password.length <= 10);
+
+
+
+
+
+</script>
+
+<!-- <script>
 import { useAuthStore } from '@/stores/authStore';
 import { mapActions } from 'pinia';
 import { useToast } from "vue-toastification";
@@ -134,6 +193,6 @@ isPasswordValid() {
 
 }
 }
-</script>
+</script> -->
 
 <style lang="scss" scoped></style>
