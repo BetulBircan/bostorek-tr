@@ -81,12 +81,12 @@ package.json da scripts kısmı
   JWT TOKEN OLUŞTURMAMIZ GEREKİYOR YETKİLENDİRME VE KULLANICI DOĞRULAMA İÇİN
   KULLANICI GİRİŞ YAPTIKTAN SONRA TOKEN OLUŞTURULACAK
 
-  /*contention issue : ortak olaraak kullanılan bir kaynaktaki veri çakışmasına denk gelir.Farklı kullanıcılar tarafından bir
+  /*contention issue : ortak olarak kullanılan bir kaynaktaki veri çakışmasına denk gelir.Farklı kullanıcılar tarafından bir
 kitaba aynı anda yorumlar yapıldığında güncellenecek olan collection sırasında problemler çıkabilir.
 
 */
 
-
+çoklu yorum satırı ----> alt + shift + a
 
 
 

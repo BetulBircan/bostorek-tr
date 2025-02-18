@@ -2,16 +2,16 @@
     <section style="min-height: calc(100vh - 130px); overflow : hidden">
         <div class="container py-5">
             <ul class="nav nav-tabs" id="dashboardTab" role="tablist">
-                <li class="nav-item" role="presentation" @click="activeTab = 'general'">
+                <li class="nav-item" role="presentation" @click="setActiveTab('general')">
                     <button class="nav-link" id="general-tab" :class="{active : activeTab === 'general'}" data-bs-toggle="tab"
                         data-bs-target="#general-tab-pane" type="button" role="tab" aria-controls="general-tab-pane"
                         aria-selected="true">General</button>
                 </li>
-                <li class="nav-item" role="presentation" @click="activeTab = 'books'">
+                <li class="nav-item" role="presentation" @click="setActiveTab('books')">
                     <button class="nav-link" :class="{active : activeTab === 'books'}" id="books-tab" data-bs-toggle="tab" data-bs-target="#books-tab-pane"
                         type="button" role="tab" aria-controls="books-tab-pane" aria-selected="false">Books</button>
                 </li>
-                <li class="nav-item" role="presantation" @click="activeTab = 'comments'">
+                <li class="nav-item" role="presantation" @click="setActiveTab('comments')">
                     <button class="nav-link" :class="{active : activeTab === 'comments'}" id="comments-tab" data-bs-toggle="tab" data-bs-target="#comments-tab-pane"
                     type="button" role="tab" aria-controls="comments-tab-pane" aria-selected="false">Comments</button>
                 </li>
@@ -31,10 +31,12 @@
     </section>
 </template>
 
-<script>
+<!-- eski yazım hali, setup ı içeride yazıyoruz, composition api -->
+<!-- <script>
 import DashboardGeneral from '@/components/dashboard/DashboardGeneral.vue';
 import DashboardBooks from '@/components/dashboard/DashboardBooks.vue';
 import DashboardComments from '@/components/dashboard/DashboardComments.vue';
+import { ref } from 'vue';
 
 export default {
     name: 'DashboardView',
@@ -43,13 +45,48 @@ export default {
         DashboardBooks,
         DashboardComments
     },
-    data() {
-        return {
-            activeTab : 'general',
+
+    //Component oluştururken composition api kullandığımızda bunu giriş noktası olarak düşünebiliriz.
+   /*  
+   data fonksiyonu gibi setup da bir obje dönüyor. options api de ayrı ayrı tanımladığımız data property leri, computed, methodlar, watch özellikleri 
+   bunların hepsini setup içerisinde yapabiliyoruz. ve setup fonksiyonu component oluşturulmadan önce çalışır. 
+   */
+    
+    setup() {
+        const activeTab = ref('general');
+
+        const setActiveTab = (tab) => {
+            activeTab.value = tab;
         }
-    },
+
+        return {
+            activeTab,
+            setActiveTab,
+        }
+    }
+    // data() {
+    //     return {
+    //         activeTab : 'general',
+    //     }
+    // },
   
 }
+</script> -->
+
+
+<!-- yeni  script hali, composition api, script tagının içerisine  -->
+ <script setup>
+ import DashboardGeneral from '@/components/dashboard/DashboardGeneral.vue';
+import DashboardBooks from '@/components/dashboard/DashboardBooks.vue';
+import DashboardComments from '@/components/dashboard/DashboardComments.vue';
+import { ref } from 'vue';
+
+const activeTab = ref('general');
+
+const setActiveTab = (tab) => {
+    activeTab.value = tab
+}
+
 </script>
 
 <style scoped>

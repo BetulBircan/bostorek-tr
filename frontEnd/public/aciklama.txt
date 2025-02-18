@@ -126,6 +126,19 @@ göstermek için kullanılır.
 
 npm install --save vue-toastification@next
 
+Composition Api : Componentler ı oluşturmak için kullanabileceğimiz api stili. composition api import edilen ref, onMounted, gibi apllerle component oluşturmamızı sağlar.
+composition api avantajları : 
+- istediğimiz değişkenleri reaktif obje haline dönüştürecğiz ve böylelikle örneğin; çalışmamızda reaktif olarak eklenmemesi gereken başlık,sabit text
+gibi ksıımların reaktif olamsına gerek yok buraları ayarlayabiliyorum ama option api da data property si içerisinde hepsini reaktif olarak tanımlamak zorundayız.
+
+Composable Yapısı Olması : 
+-Composable bir design pattern dir. Tasarım şablonudur. Bir yazılım sisteminin parçalanabilir, modüler hale getirilebilir ve tekrardan toplanabilir
+anlamına gelir.
+
+Küçük ve ortak ölçekli uygulamalarda option api yeterlidir. Ancak büyük uygulamalarda gereksiz yere reaktive stste oluşturmaktan kaçınılması gereken
+durumlarda composition api kullanılr.
+
+çoklu yorum satırı --> alt +  shift + a
 
 
 
