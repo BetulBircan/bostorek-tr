@@ -25,51 +25,30 @@
 </nav>
 </template>
 
-<script>
-    export default {
-        name: "Pagination",
-        props: {
-            currentPage: {
-                type: Number,
-                required: true
-            },
-            totalPages: {
-                type: Number,
-                required: true
-            },        
-        },
-        emits : ['page-changed'],
-        methods : {
-          // handleClick() {
-          //     alert("Next Link Clicked");
-          // }
-          
-          /*parmaereli fonksiyon
-          handleClick(name) {
-              alert(`Merhaba ${name}`);
-          }
-          */
-         goToPage(page) {
-          /*
-          this.currentPage = page;
-          burada parent componentten child componet e propla aktarılan bilgiyi değiştriremeyiz çünkü proplar readonly dir.
-          direk değer ataması yapılamaz.emit kullanılır.
-          */
-         this.$emit('page-changed', page);
-         }
-        }
-        // computed: {
-        //     pages() {
-        //         return Math.ceil(this.total / this.perPage);
-        //     }
-        // },
-        // methods: {
-        //     changePage(page) {
-        //         this.$emit('page-changed', page);
-        //     }
-        // }
-    }
+<script setup>
+
+//defineProps u import etmemize gerek yok
+const props = defineProps({
+  currentPage : {
+    type : Number,
+    required : true
+  },
+  totalPages : {
+    type : Number,
+    required : true
+  }
+})
+
+//defineEmits i import etmemize gerek
+const emits = defineEmits(['page-changed'])
+
+const goToPage = (page) => {
+  emits('page-changed', page)
+}
+
 </script>
+
+
 
 <style lang="scss" scoped>
 

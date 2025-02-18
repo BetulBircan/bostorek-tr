@@ -25,7 +25,37 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import {ref} from 'vue'
+const props = defineProps({
+    items : {
+        type : Array,
+        required : true
+    },
+    height : {
+        type : String,
+        default : '100%'
+    },
+})
+
+const currentItemIndex = ref(0);
+const selectedItem = ref(null);
+
+selectedItem.value = props.items[0];
+
+const nextItem = () => {
+    currentItemIndex.value = (currentItemIndex.value + 1) % props.items.length;
+    selectedItem.value = props.items[currentItemIndex.value];
+}
+
+const prevItem = () => {
+    currentItemIndex.value = (currentItemIndex.value - 1 + props.items.length) % props.items.length;
+    selectedItem.value = props.items[currentItemIndex.value];
+}
+
+</script>
+
+<!-- <script>
     export default {
         name : 'Carousel',
         props : {
@@ -62,7 +92,7 @@
         }
       
     }
-</script>
+</script> -->
 
 <style scoped>
 .custom-carousel-caption {
