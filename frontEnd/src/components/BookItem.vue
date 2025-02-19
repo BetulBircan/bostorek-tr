@@ -18,55 +18,45 @@
     </div>
 </template>
 
-<script>
-// import books from '@/db';
-
-export default {
-    name: "BookItem",
-    props : {
-        book : {
-            type : Object,
-            default : () => ({})
-        }
-    },
-    computed : {
-        averageRating() {
-            if(this.book.ratings && this.book.ratings.length > 0) {
-                const totalRating = this.book.ratings.reduce((sum, rating) => sum + rating.rate, 0);
-
-                return (totalRating / this.book.ratings.length).toFixed(1);
-            }
-            else {
-                return '-';
-            }
-        },
-
-        ratingBadgeClass() {
-
-            if(this.averageRating > 7) {
-                return 'bg-success';
-            }
-            else if(this.averageRating > 4 || this.averageRating === '-') {
-                return 'bg-warning';
-            }
-            else {
-                return 'bg-danger';
-
-            }
-        },
-       
-        
-       truncatedDescription() {
-          if(this.book.description.length > 80) {
-                return this.book.description.slice(0, 80) + '...';
-            }
-            else {
-                return this.book.description;
-          }
-       }
+<script setup>
+import { computed } from 'vue';
+const props = defineProps({
+    book: {
+        type: Object,
+        default: () => ({})
     }
-}
+})
+
+const averageRating = computed(() => {
+    if (props.book.ratings && props.book.ratings.length > 0) {
+        const totalRating = props.book.ratings.reduce((sum, rating) => sum + rating.rate, 0);
+
+        return (totalRating / props.book.ratings.length).toFixed(1);
+    } else {
+        return '-';
+    }
+})
+
+const ratingBadgeClass = computed(() => {
+    if (averageRating.value > 7) {
+        return 'bg-success';
+    } else if (averageRating.value > 4 || averageRating.value === '-') {
+        return 'bg-warning';
+    } else {
+        return 'bg-danger';
+    }
+})
+
+const truncatedDescription = computed(() => {
+    if (props.book.description.length > 80) {
+        return props.book.description.slice(0, 80) + '...';
+    } else {
+        return props.book.description;
+    }
+})
 </script>
+
+
 
 <style scoped>
 .card-text {
