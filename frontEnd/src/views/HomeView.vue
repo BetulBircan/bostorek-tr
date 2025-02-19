@@ -93,7 +93,83 @@
     <!-- JAVASCRİPT ŞEKLİNDE TANIMLARKEN STYLE KISMINDA CAMEL CASE TANIMLANIR. -->
 </template>
 
-<script>
+<script setup>
+import hero_1 from '@/assets/images/hero_1.jpg';
+import hero_2 from '@/assets/images/hero_2.jpg';
+import hero_3 from '@/assets/images/hero_3.jpg';
+import SectionHeader from '@/components/SectionHeader.vue';
+import { useBookStore } from '@/stores/bookStore';
+import { useCommentStore } from '@/stores/commentStore';
+//import { mapState, mapActions } from 'pinia';
+//import LoadingSpinner from '@/components/widgets/SpinnerWidget.vue';
+import CarouselWidget from '@/components/widgets/CarouselWidget.vue';
+import { computed, ref } from 'vue';
+
+//satitk değişmeyecek veri olduğu için ref ya da reactive şekilde tanımlamamıza gerek yok.
+const carouselItems =[
+    { imageUrl: hero_1, subtitle: 'Liberte', title: 'Lorem Ipsum Dolor Sit Amet', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+    { imageUrl: hero_2, subtitle: 'Egalite', title: 'Excepteur Sint Occaecat Cupidatat', description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
+    { imageUrl: hero_3, subtitle: 'Fraternite', title: 'Neque Porro Quisquam Est', description: 'Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.' }
+]
+
+const bookStore = useBookStore();
+const commentStore = useCommentStore();
+const selectedFilter = ref('latest');
+const openAccordionIndex = ref(0);
+
+const selectFilter = (filter) => {
+    selectedFilter.value = filter;
+}
+
+const toggleAccordion = (index) => {
+    console.log('index1', index);
+    
+    if (openAccordionIndex.value === index) {
+        console.log('index2', index);
+        console.log('openAccordionIndex', openAccordionIndex.value);
+        
+        
+        openAccordionIndex.value = -1;
+    } else {
+        openAccordionIndex.value = index;
+    }
+}
+
+const formattedRating = (rating) => {
+    return Number.isInteger(rating) ? rating.toFixed(1) : rating;
+}
+
+const filteredBooks = computed(() => {
+    if (selectedFilter.value === 'latest') {
+        return bookStore.latest4Books;
+    } else if (selectedFilter.value === 'best') {
+        return bookStore.bestRatings4Books;
+    }
+})
+
+const prepared4Comments = computed(() => {
+    const latest4Comments = commentStore.comments
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 4);
+
+    return latest4Comments.map(comment => {
+        const correspondingBook = bookStore.books.find((book) => book._id === comment.book);
+        if (correspondingBook) {
+            return {
+                ...comment,
+                title: correspondingBook.title
+            }
+        }
+
+        return comment;
+    });
+})
+
+const isLoading = computed(() => bookStore.isLoading);
+
+</script>
+
+<!-- <script>
 
 //import CarouselWidget from '@/components/widgets/CarouselWidget.vue';
 import hero_1 from '@/assets/images/hero_1.jpg';
@@ -191,7 +267,7 @@ export default {
 
     }
 }
-</script>
+</script> -->
 
 <style scoped>
 .list-group-item.active {

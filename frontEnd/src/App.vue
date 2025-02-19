@@ -11,7 +11,12 @@
   
 </template>
 
-<script>
+<script setup>
+import NavBar from "@/components/NavBar.vue"
+import TheFooter from "@/components/TheFooter.vue";
+</script>
+
+<!-- <script>
     // javascript kısmı
 
     //reactivity özelliği : bir şeye tepki vermek
@@ -35,7 +40,7 @@
         },
        
     }
-</script>
+</script> -->
 
 <style>
   

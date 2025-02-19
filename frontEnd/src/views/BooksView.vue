@@ -16,7 +16,35 @@
     </section>
 </template>
 
-<script>
+<script setup>
+import SectionHeader from '@/components/SectionHeader.vue'
+import BookList from '@/components/BookList.vue';
+import PaginationWidget from '@/components/widgets/PaginationWidget.vue';
+import { useBookStore } from '@/stores/bookStore';
+import { computed, ref } from 'vue';
+
+const bookStore = useBookStore();
+const currentPage = ref(1);
+const itemsPerPage = ref(8);
+
+const totalPages = computed(() => {
+    return Math.ceil(bookStore.books.length / itemsPerPage.value);
+});
+
+const paginetedBooks = computed(() => {
+            const startIndex = (currentPage.value - 1) * itemsPerPage.value; //4 - 8 currenTpAGE = 2
+            const endIndex = startIndex +itemsPerPage.value;
+            return bookStore.books.slice(startIndex, endIndex);
+        })
+
+const updatePage = (page) => {
+    currentPage.value = page;
+}
+
+
+</script>
+
+<!-- <script>
 import SectionHeader from '@/components/SectionHeader.vue'
 import BookList from '@/components/BookList.vue';
 import PaginationWidget from '@/components/widgets/PaginationWidget.vue';
@@ -63,7 +91,7 @@ export default {
         //backend e istek atıp kitapları çekecek
     },
 }
-</script>
+</script> -->
 
 <style scoped>
 .auth-box {
