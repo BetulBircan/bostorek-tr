@@ -27,7 +27,65 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { useAuthStore } from '@/stores/authStore';
+import { useUserStore } from '@/stores/userStore';
+import { computed, ref, reactive } from 'vue';
+//import { mapState, mapActions } from 'pinia';
+import { useToast } from 'vue-toastification';
+
+const userInfo = reactive({
+    username: '',
+    email: '',
+    password: ''
+});
+const editMode = ref(false);
+const userStore = useUserStore();
+const authStore = useAuthStore();
+const user = computed(() => userStore.user);
+
+userInfo.username =authStore.user.username;
+userInfo.email =authStore.user.email;
+
+const toggleEditMode = () => {
+    editMode.value = !editMode.value;
+}
+
+const  saveUserInfo = async () => {
+    try {
+        await userStore.updateUserDetails(userInfo);
+
+        const toast = useToast();
+
+        toast.success('Please login with new details', {
+            position: 'top-right',
+            timeout: 3500,
+            closeButton: 'button',
+            icon: true,
+            rtl: false
+        })
+
+        setTimeout(() => {
+            authStore.logout();
+        }, 4000);
+
+    } catch (error) {
+
+    }
+}
+
+const cancelEditMode = () => {
+    editMode.value = false;
+    userInfo.username = userStore.user.username;
+    userInfo.email = userStore.user.email;
+    userInfo.password = '';
+}
+
+
+
+</script>
+
+<!-- <script>
 import { useAuthStore } from '@/stores/authStore';
 import { useUserStore } from '@/stores/userStore';
 import { mapState, mapActions } from 'pinia';
@@ -90,6 +148,6 @@ export default {
         }
     }
 }
-</script>
+</script> -->
 
 <style lang="scss" scoped></style>

@@ -27,7 +27,7 @@
    </div>
 
    <!-- editModal -->
-   <div ref="editModal" class="modal fade" tabIndex="-1" >
+   <div ref="editModalRef" class="modal fade" tabIndex="-1" >
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -51,7 +51,7 @@
     </div>
 
     <!-- delete Modal -->
-    <div ref="deleteModal" class="modal" tabindex="-1">
+    <div ref="deleteModalRef" class="modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
@@ -71,7 +71,98 @@
 
 </template>
 
-<script>
+<script setup>
+import { useCommentStore } from '@/stores/commentStore.js';
+import { useAuthStore } from '@/stores/authStore.js';
+//import { mapState, mapActions } from 'pinia';
+import DashboardEditComment  from '@/components/dashboard/modals/DashboardEditComment.vue' 
+import { Modal } from 'bootstrap';
+import { useToast } from 'vue-toastification';
+import { ref, reactive, onMounted, nextTick, computed } from 'vue';
+
+const editModal = ref(null);
+const deleteModal = ref(null);
+//const modalTitle = ref('');
+const editCommentId = ref(null);
+const deleteCommentId = ref(null);
+const commentData = reactive({
+    content : '',
+});
+const deleteModalRef = ref(null);
+const editModalRef = ref(null);
+
+const commentStore = useCommentStore();
+const authStore = useAuthStore();
+
+onMounted(async () => {
+    await nextTick(); // DOM'un tamamen oluşturulmasını bekler
+
+if (editModalRef.value) {
+    editModal.value = new Modal(editModalRef.value);
+}
+if (deleteModalRef.value) {
+    deleteModal.value = new Modal(deleteModalRef.value);
+}
+});
+
+const showToast = (message, options) => {
+    const toast = useToast();
+    toast(message, {
+        position: 'top-right',
+        closeButton: 'button',
+        icon: true,
+        rtl: false,
+        ...options
+    });
+};
+
+const openEditModal = (comment) => {
+    editCommentId.value = comment._id;
+    commentData.content = comment.content;
+    editModal.value.show();
+};
+
+const openDeleteModal = (comment) => {
+    deleteCommentId.value = comment._id;
+    deleteModal.value.show();
+};
+
+const editedComment = async () => {
+    try {
+        await commentStore.editComment(editCommentId.value, commentData);
+
+        await commentStore.fetchCommentsByUser(authStore.user._id);
+
+        editModal.value.hide();
+
+        showToast('Comment updated successfully', { type: 'success', timeout: 3000 });
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const deletedComment = async () => {
+    try {
+        await commentStore.deleteComment(deleteCommentId.value);
+
+        await commentStore.fetchCommentsByUser(authStore.user._id);
+
+        deleteModal.value.hide();
+
+        showToast('Comment deleted successfully', { type: 'success', timeout: 3000 });
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+commentStore.fetchCommentsByUser(authStore.user._id);
+
+const commentsByUser = computed(() => commentStore.commentsByUser);
+//const user = computed(() => authStore.user);
+
+
+</script>
+<!-- <script>
     import { useCommentStore } from '@/stores/commentStore.js';
     import { useAuthStore } from '@/stores/authStore.js';
     import { mapState, mapActions } from 'pinia';
@@ -178,7 +269,7 @@
         }
 
     }
-</script>
+</script> -->
 
 <style scoped>
 

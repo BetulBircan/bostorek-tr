@@ -103,7 +103,7 @@
     </div>
 
     <!-- Delete Modal -->
-    <div class="modal fade" ref="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" ref="deleteModalRef" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -120,7 +120,7 @@
                         <button type="button" class="btn btn-outline-secondary"
                             @click="deleteModal.hide()">Close</button>
                         <button type="button" class="btn btn-primary"
-                            @click="deleteBook(denemeBook.id, denemeBook.title)">Confirm</button>
+                            @click="deleteBook(denemeBook.id, denemeBook.title)">Delete</button>
                     </div>
                 </div>
             </div>
@@ -129,7 +129,171 @@
 
 </template>
 
-<script>
+<script setup>
+import { Modal } from 'bootstrap';
+import { useBookStore } from '@/stores/bookStore';
+//import { mapActions, mapState } from 'pinia';
+import { useToast } from 'vue-toastification';
+import PaginationWidget from '@/components/widgets/PaginationWidget.vue';
+import { computed, onMounted, ref, reactive, nextTick  } from 'vue';
+
+const modal = ref(null);
+const deleteModal = ref(null);
+const modalTitle = ref('Add Book');
+const bookData = reactive({
+    title: '',
+    author : '',
+    description : '',
+    pageNumber : null
+});
+const editedBookId = ref(null);
+const denemeBook = reactive({
+    id: '',
+    title: ''
+});
+const currentPage = ref(1);
+const itemsPerPage = ref(5);
+
+const bookStore = useBookStore();
+const addEditModal = ref(null);
+const deleteModalRef = ref(null);
+
+onMounted(async () => {
+    await nextTick(); // DOM'un tamamen oluşturulmasını bekler
+
+if (addEditModal.value) {
+    modal.value = new Modal(addEditModal.value);
+}
+if (deleteModalRef.value) {
+    deleteModal.value = new Modal(deleteModalRef.value);
+}
+});
+
+const userBooks = computed(() => {
+    return bookStore.userUploadedBooks.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+});
+
+const totalPages = computed(() => {
+    return Math.ceil(userBooks.value.length / itemsPerPage.value);
+});
+
+const paginatedBooks = computed(() => {
+    const startIndex = (currentPage.value - 1) * itemsPerPage.value;
+    const endIndex = startIndex + itemsPerPage.value;
+    return userBooks.value.slice(startIndex, endIndex);
+});
+
+const updatePage = (page) => {
+    currentPage.value = page;
+};
+
+const saveBook = () => {
+    if (modalTitle.value === 'Add Book') {
+        addBook();
+    } else if (modalTitle.value === 'Edit Book') {
+        editBook();
+    }
+};
+
+const openAddModal = () => {
+    modalTitle.value = 'Add Book';
+    bookData.title = '';
+    bookData.author = '';
+    bookData.description = '';
+    bookData.pageNumber = null;
+    modal.value.show();
+};
+
+const openEditModal = (existingBook) => {
+    modalTitle.value = 'Edit Book';
+    editedBookId.value = existingBook._id;
+    bookData.title = existingBook.title;
+    bookData.author = existingBook.author;
+    bookData.description = existingBook.description;
+    bookData.pageNumber = existingBook.pageNumber;
+    modal.value.show();
+};
+
+const showToast = (message, options) => {
+    const toast = useToast();
+
+    toast(message, {
+        position: 'top-right',
+        closeButton: 'button',
+        icon: true,
+        rtl: false,
+        ...options
+    });
+};
+
+const openDeleteModal = (bookId, bookTitle) => {
+    deleteModal.value.show();
+    denemeBook.id = bookId;
+    denemeBook.title = bookTitle;
+};
+
+const editBook = async () => {
+    try {
+        await bookStore.editTheBook(editedBookId.value, bookData);
+
+        await bookStore.fetchBooksByUploader();
+
+        modal.value.hide();
+
+        showToast('The book edited successfully', {
+            type: 'success',
+            timeout: 3000
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const deleteBook = async (bookId, bookTitle) => {
+    try {
+        await bookStore.deleteTheBook(bookId);
+        deleteModal.value.hide();
+
+        await bookStore.fetchBooksByUploader();
+
+        showToast(`${bookTitle} deleted successfully`, {
+            type: 'warning',
+            timeout: 3000
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const addBook = async () => {
+    try {
+        await bookStore.addNewBook(bookData);
+
+        currentPage.value = 1;
+
+        modal.value.hide();
+
+        bookData.title = '';
+        bookData.author = '';
+        bookData.description = '';
+        bookData.pageNumber = null;
+
+        showToast('New book added successfully', {
+            type: 'success',
+            timeout: 1000
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+bookStore.fetchBooksByUploader();
+
+
+
+</script>
+
+<!-- <script>
 import { Modal } from 'bootstrap';
 import { useBookStore } from '@/stores/bookStore';
 import { mapActions, mapState } from 'pinia';
@@ -345,7 +509,7 @@ export default {
     }
 
 }
-</script>
+</script> -->
 
 <style scoped>
 .list-move,
