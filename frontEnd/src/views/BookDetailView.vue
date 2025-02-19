@@ -125,33 +125,12 @@
 
                                             <p class="small text-muted mb-0">{{ comment.upvotes.length }}</p>
 
-                                            <!-- 
-                                            <p class="small text-muted mb-0">Upvote?</p>
-                                            <font-awesome-icon :icon="['far', 'thumbs-up']" />
-                                            <p class="small text-muted mb-0">3</p> -->
+                           
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="card mb-4">
-                                <div class="card-body">
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum blanditiis nihil quibusdam quos voluptates, ipsum earum. Laudantium mollitia culpa nemo dolor labore laboriosam iste velit ullam autem rerum, placeat necessitatibus.
-                                    Dicta, dolorum neque ipsum soluta placeat quas est alias, velit expedita eveniet nostrum quos id nulla fugiat eum excepturi. Voluptates temporibus, odio laborum perspiciatis natus aspernatur provident earum at et?
-                                    Voluptas obcaecati dolore dignissimos ipsum ullam asperiores modi quisquam eveniet dolores dolorum in repellendus recusandae nostrum, cupiditate assumenda aliquid ipsam tempore vitae quia? Sit sequi inventore earum, facilis nesciunt magnam.
-                                    Hic reprehenderit officia ab animi pariatur veniam necessitatibus perferendis nemo sit rerum, quod repellat laborum. Quaerat laboriosam fuga iste maxime architecto excepturi fugit? Necessitatibus hic numquam voluptatem ex suscipit quae.
-                                    Veritatis quod odit consequatur deserunt nemo! Facere eum odio sed laudantium, voluptate rem velit necessitatibus aperiam porro voluptatem harum totam dolores quia consequatur, cumque unde a praesentium ipsam alias quis.</p>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex justify-content-between">
-                                            <p class="small mb-0 ms-2">Username</p>
-                                        </div>
-                                        <div class="d-flex justify-content-between" style="gap:10px">
-                                            <p class="small text-muted mb-0">Upvote?</p>
-                                            <font-awesome-icon :icon="['fas', 'thumbs-up']" style="color: var(--secondary-color)"/>
-                                            <p class="small text-muted mb-0">4</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
+                            
                         </div>
                     </div>
                 </div>
@@ -164,7 +143,157 @@
     </section>
 </template>
 
-<script>
+<script setup>
+import SectionHeader from '@/components/SectionHeader.vue';
+import SpinnerWidget from '@/components/widgets/SpinnerWidget.vue';
+import { useBookStore } from '@/stores/bookStore';
+import { useAuthStore } from '@/stores/authStore';
+import { useCommentStore } from '@/stores/commentStore';
+import { useRatingStore } from '@/stores/ratingStore';
+import { ref, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+//import { mapState, mapActions } from 'pinia';
+
+const book = ref(null);
+const loading = ref(true);
+const commentContent = ref("");
+const userRate = ref(null);
+
+const bookStore = useBookStore();
+const authStore = useAuthStore();
+const commentStore = useCommentStore();
+const ratingStore = useRatingStore();
+
+const route = useRoute();
+const router = useRouter();
+
+const formattedRating = computed(() => {
+    // Eğer rating tam sayıysa ondalıklı hale getiriyoruz
+    return Number.isInteger(book.value.rating) ? book.value.rating.toFixed(1) : book.value.rating;
+});
+
+const averageRating = computed(() => {
+    if(ratingStore.ratingsForBook && ratingStore.ratingsForBook.length > 0) {
+        //reduce fonksiyonu ile array içerisindeki değerleri toplarız
+        const totalRating = ratingStore.ratingsForBook.reduce((sum, rating) => sum + rating.rate, 0);
+        return (totalRating / ratingStore.ratingsForBook.length).toFixed(1);
+    }
+    else {
+        return 0;
+    }
+});
+
+const ratingCount = computed(() => {
+    return ratingStore.ratingsForBook ?  ratingStore.ratingsForBook.length : 0;
+});
+
+//kullanıcı daha önce oylama yapmış mı kontrol eder
+const isUserAlreadyRated = computed(() => {
+    if(!authStore.user) {
+        return false;
+    }
+    
+    else if(ratingStore.ratingsForBook && ratingStore.ratingsForBook.length > 0) {
+        return ratingStore.ratingsForBook.some(rating => rating.ratedBy._id === authStore.user._id);
+    }
+});
+
+//kullanıcının verdiği oyu alır
+const userRating = computed(() => {
+    if(ratingStore.ratingsForBook) {
+        const userRatingObj = ratingStore.ratingsForBook.find(rating => rating.ratedBy._id === authStore.user._id);
+        return userRatingObj ? userRatingObj.rate : null;
+    }
+            
+})
+
+const upvote = async (commentId) => {
+    try {
+        await commentStore.upvoteComment(commentId);
+
+        await commentStore.fetchCommentsForBook(route.params.id);
+    } catch (error) {
+        
+    }
+}
+
+const downvote = async (commentId) => {
+    try {
+        await commentStore.downvoteComment(commentId);
+
+        await commentStore.fetchCommentsForBook(route.params.id);
+    } catch (error) {
+        
+    }
+}
+
+const goToBackBooks = () => {
+    router.push({ name: "books" }); //router.push ile yönlendirme yapılır. name i books olan route a yönlendirme yapılır.
+}
+
+const selectBook = () => {
+    const bookId = route.params.id;
+    book.value = bookStore.selectedBooks(bookId);
+    loading.value = false;
+}
+
+const addComment = async () => {
+    try {
+        const bookId = route.params.id;
+        const content = commentContent.value;
+        const userId = authStore.user._id;
+
+        await commentStore.addNewComment(
+            {
+                bookId,
+                content,
+                userId,
+            }
+        )
+
+        commentContent.value = "";
+        await commentStore.fetchCommentsForBook(route.params.id);
+
+    } catch (error) {
+        console.log(error,"errorfront");
+        
+    }
+}
+
+const addRate = async () => {
+    try {
+        const bookId = route.params.id;
+        const rate = userRate.value;
+        const userId = authStore.user._id;
+
+        await ratingStore.addNewRate(
+            {
+                rate,
+                bookId,
+                userId,
+            }
+        )
+
+        userRate.value = null;
+
+        await ratingStore.fetchRatingsForBook(route.params.id);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const isLoggedIn = computed(() => authStore.isLoggedIn);
+const commentsForBook = computed(() => commentStore.commentsForBook);
+const user = computed(() => authStore.user);
+
+selectBook();
+commentStore.fetchCommentsForBook(route.params.id);
+ratingStore.fetchRatingsForBook(route.params.id);
+
+
+</script>
+
+<!-- <script>
 import SectionHeader from '@/components/SectionHeader.vue';
 import SpinnerWidget from '@/components/widgets/SpinnerWidget.vue';
 import { useBookStore } from '@/stores/bookStore';
@@ -335,7 +464,7 @@ component : BookDetailView
     
 
 }
-</script>
+</script> -->
 
 <style scoped>
 .image-box {

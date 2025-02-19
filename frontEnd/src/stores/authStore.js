@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('authStore',{
         logout() {
             this.user = null;
             localStorage.removeItem('user'); //local storage dan kullanıcı bilgilerini siler
-            //location.reload(); //sayfayı yeniler
+            location.reload(); //sayfayı yeniler
         }
     }
 })
