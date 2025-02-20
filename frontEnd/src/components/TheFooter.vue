@@ -6,18 +6,8 @@
     </footer>
 </template>
 
-<script>
-    export default {
-        name: "TheFooter",
-        data() {
-            return {
-
-            }
-        },
-        methods: {
-
-        }
-    }
+<script setup>
+ 
 </script>
 
 <style lang="scss" scoped>

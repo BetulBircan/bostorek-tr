@@ -5,10 +5,12 @@ import * as authMiddleware from '../middlewares/authMiddleware.js';
 const router = express.Router();
 
 router.route('/book/:id')
-.get(authMiddleware.authenticateUser, ratingController.getRatingsForBook);
+.get(ratingController.getRatingsForBook);
 
 
 router.route('/')
 .post(authMiddleware.authenticateUser, ratingController.createARate);
+
+
 
 export default router;

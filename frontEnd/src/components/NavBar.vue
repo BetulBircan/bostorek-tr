@@ -26,7 +26,24 @@
   </nav>
 </template>
 
-<script>
+<script setup>
+import { RouterLink } from 'vue-router';
+import { useAuthStore } from '@/stores/authStore';
+import { computed,ref } from 'vue';
+//import { mapState, mapActions } from 'pinia';
+
+const brandName = 'Bostorek';
+const isUpperCase = ref(false);
+
+const authStore = useAuthStore();
+const isLoggedIn = computed(() => authStore.isLoggedIn);
+
+const logoutUser = () => {
+    authStore.logout();
+}
+</script>
+
+<!-- <script>
 import { RouterLink } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 import { mapState, mapActions } from 'pinia';
@@ -51,7 +68,7 @@ import { mapState, mapActions } from 'pinia';
             }
         },
     }
-</script>
+</script> -->
 
 <style scoped>
 .custom-nav {

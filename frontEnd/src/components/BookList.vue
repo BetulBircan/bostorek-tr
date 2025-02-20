@@ -8,7 +8,18 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import BookItem from '@/components/BookItem.vue'
+import { RouterLink } from 'vue-router';
+
+const props = defineProps({
+    books: {
+        type: Array,
+        default: () => ([]),
+    },
+});
+</script>
+<!-- <script>
 import BookItem from '@/components/BookItem.vue'
 import { RouterLink } from 'vue-router';
 export default {
@@ -23,6 +34,6 @@ export default {
         }
     }
 }
-</script>
+</script> -->
 
 <style lang="scss" scoped></style>

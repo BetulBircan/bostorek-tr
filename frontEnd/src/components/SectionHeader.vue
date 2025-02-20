@@ -5,7 +5,20 @@
         </div>
 </template>
 
-<script>
+<script setup>
+const props = defineProps({
+    title : {
+        type : String,
+        required : true
+    },
+    text : {
+        type : String,
+        required : true
+    }
+})
+</script>
+
+<!-- <script>
     export default {
         //hata ayıklamada derleyici tarafında hangi componenetin hata verdiğini anlamak için kullanılır.
         name : 'SectionHeader',
@@ -21,7 +34,7 @@
             }
         }
     }
-</script>
+</script> -->
 
 <style lang="scss" scoped>
 
