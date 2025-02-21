@@ -27,7 +27,7 @@
                             </div>
                             <div class="row border-bottom pb-2">
                                 <div class="col-lg-6"><strong>Upload Date</strong></div>
-                                <div class="col-lg-6">{{ book.updatedAt }}</div>
+                                <div class="col-lg-6">{{ formatDate(book.updatedAt) }}</div>
                             </div>
                         </div>
                     </div>
@@ -289,6 +289,18 @@ const user = computed(() => authStore.user);
 selectBook();
 commentStore.fetchCommentsForBook(route.params.id);
 ratingStore.fetchRatingsForBook(route.params.id);
+
+const formatDate = (date) => {
+  const dateObj = new Date(date);
+  const day = padZero(dateObj.getDate());
+  const month = padZero(dateObj.getMonth() + 1);
+  const year = dateObj.getFullYear();
+  
+  return `${day}.${month}.${year} `;
+};
+const padZero = (value) => {
+  return value < 10 ? `0${value}` : `${value}`;
+};
 
 
 </script>

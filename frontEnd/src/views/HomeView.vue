@@ -75,7 +75,7 @@
                                     alt="avatar" width="60" height="60" />
                                 <div>
                                     <h6 class="fw-6 text-primary mb-1">{{ comment.title }}</h6>
-                                    <p class="text-muted small mb-0">{{ comment.postedBy.username }} - {{ comment.createdAt }}</p>
+                                    <p class="text-muted small mb-0">{{ comment.postedBy.username }} - {{ formatDate(comment.createdAt) }}</p>
                                 </div>
                             </div>
 
@@ -154,6 +154,19 @@ const prepared4Comments = computed(() => {
 });
 
 const isLoading = computed(() => bookStore.isLoading);
+
+const formatDate = (date) => {
+  const dateObj = new Date(date);
+  const day = padZero(dateObj.getDate());
+  const month = padZero(dateObj.getMonth() + 1);
+  const year = dateObj.getFullYear();
+  
+  return `${day}.${month}.${year} `;
+};
+const padZero = (value) => {
+  return value < 10 ? `0${value}` : `${value}`;
+};
+
 </script>
 <!-- <script>
 
