@@ -28,14 +28,18 @@
                         </div>
                     </div>
                     <div v-else class="accordion">
+                        <p style="display: none;">Açık olan indeks: {{ openAccordionIndex }}</p>
+                        <!-- <p>Açık olan indeks: {{ openAccordionIndex }}</p> -->
                         <div class="accordion-item" v-for="(book, index) in filteredBooks" :key="index">
                             <h2 class="accordion-header">
                                 <button class="accordion-button" type="button"
-                                    :class="{ collapsed: openAccordionIndex !== index }" @click="toggleAccordion(index)">
+                                    :class="{ collapsed: openAccordionIndex !== index }"
+                                    @click="toggleAccordion(index)">
                                     <strong>{{ book.title }} - {{ book.author }}</strong>
                                 </button>
                             </h2>
-                            <div class="accordion-collapse collapse " :class="{ show: openAccordionIndex === index }">
+                            <div class="accordion-collapse collapse"
+                                :class="{ show: openAccordionIndex === index }">
                                 <div class="accordion-body">
                                     <div class="row">
                                         <div class="col-md-4">
@@ -55,7 +59,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 
@@ -100,40 +103,29 @@ import hero_3 from '@/assets/images/hero_3.jpg';
 import SectionHeader from '@/components/SectionHeader.vue';
 import { useBookStore } from '@/stores/bookStore';
 import { useCommentStore } from '@/stores/commentStore';
-//import { mapState, mapActions } from 'pinia';
-//import LoadingSpinner from '@/components/widgets/SpinnerWidget.vue';
 import CarouselWidget from '@/components/widgets/CarouselWidget.vue';
-import { computed, ref } from 'vue';
+import { computed, ref, nextTick  } from 'vue';
 
-//satitk değişmeyecek veri olduğu için ref ya da reactive şekilde tanımlamamıza gerek yok.
-const carouselItems =[
+const carouselItems = [
     { imageUrl: hero_1, subtitle: 'Liberte', title: 'Lorem Ipsum Dolor Sit Amet', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
     { imageUrl: hero_2, subtitle: 'Egalite', title: 'Excepteur Sint Occaecat Cupidatat', description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
     { imageUrl: hero_3, subtitle: 'Fraternite', title: 'Neque Porro Quisquam Est', description: 'Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.' }
-]
+];
 
 const bookStore = useBookStore();
 const commentStore = useCommentStore();
 const selectedFilter = ref('latest');
-const openAccordionIndex = ref(0);
+const openAccordionIndex = ref(0); // Başlangıçta kapalı
 
 const selectFilter = (filter) => {
     selectedFilter.value = filter;
 }
 
-const toggleAccordion = (index) => {
-    console.log('index1', index);
-    
-    if (openAccordionIndex.value === index) {
-        console.log('index2', index);
-        console.log('openAccordionIndex', openAccordionIndex.value);
-        
-        
-        openAccordionIndex.value = -1;
-    } else {
-        openAccordionIndex.value = index;
-    }
-}
+const toggleAccordion = async (index) => {
+    openAccordionIndex.value = openAccordionIndex.value === index ? -1 : index;
+    await nextTick(); // DOM'un güncellenmesini bekle
+    console.log('Toggled accordion index:', openAccordionIndex.value);
+};
 
 const formattedRating = (rating) => {
     return Number.isInteger(rating) ? rating.toFixed(1) : rating;
@@ -145,7 +137,7 @@ const filteredBooks = computed(() => {
     } else if (selectedFilter.value === 'best') {
         return bookStore.bestRatings4Books;
     }
-})
+});
 
 const prepared4Comments = computed(() => {
     const latest4Comments = commentStore.comments
@@ -155,20 +147,14 @@ const prepared4Comments = computed(() => {
     return latest4Comments.map(comment => {
         const correspondingBook = bookStore.books.find((book) => book._id === comment.book);
         if (correspondingBook) {
-            return {
-                ...comment,
-                title: correspondingBook.title
-            }
+            return { ...comment, title: correspondingBook.title };
         }
-
         return comment;
     });
-})
+});
 
 const isLoading = computed(() => bookStore.isLoading);
-
 </script>
-
 <!-- <script>
 
 //import CarouselWidget from '@/components/widgets/CarouselWidget.vue';
