@@ -39,26 +39,30 @@ const authStore = useAuthStore(pinia);
 axios.interceptors.response.use(
     (response) => response,
     (error) => {
-        
-        if(error.response && error.response.status === 401 && error.response.data.error === 'Token has expired') {
-            //Display Toast Message
-            toast.error('Your token has expired, forwarding login page', {
-                position : 'top-right',
-                timeout: 3000,
-                closeButton : 'button',
-                icon : true,
-                rtl : false,
-            });
-
-            setTimeout(() => {
-                authStore.logout();
-                router.push('/login');
-            }, 3000);
-        }
-
-        throw error;
+      if (
+        error.response &&
+        error.response.status === 401 &&
+        error.response.data.error === 'Token has expired!'
+      ) {
+        // Display Toast Message
+        toast.error('Your token has expired, forwarding login page', {
+          position: 'top-right',
+          timeout: 3000,
+          closeButton: 'button',
+          icon: true,
+          rtl: false,
+        });
+  
+        setTimeout(() => {
+          authStore.logout();
+          router.push('/login');
+        }, 3000);
+      }
+  
+      throw error;
     }
-)
+  );
+  
 
 const storedUser = localStorage.getItem('user');
 
@@ -77,18 +81,22 @@ const commentStore = useCommentStore(pinia);
 
 //axios ınterceptor ---> Eğer hata varsa ve bu hatanın kodu 401 ise toast mesajı göster (token ınınz expire oldu  logine yönlendiriliyorsunuz) yaz ve login e yönlendr çıkış işlemi yap.
  
-const init = async () => { 
-    await Promise.all([bookStore.fetchBooks(), commentStore.fetchComments()]);
-    const app = createApp(App);
-    app
-    .use(pinia)
-    .use(router)
-    .component('font-awesome-icon', FontAwesomeIcon)
-    .use(Toast)
-    .mount("#app")
-}
-
-init();
+const init = async () => {
+    try {
+      await Promise.all([bookStore.fetchBooks(), commentStore.fetchComments()]);
+      const app = createApp(App);
+      app
+        .use(pinia)
+        .use(router)
+        .component('font-awesome-icon', FontAwesomeIcon)
+        .use(Toast)
+        .mount('#app');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  init();
 
 //uygulama başladığında kitapları çekecek ama proje büyüyünce bu kısım sağlıklı olmayabilir.
 // bookStore.fetchBooks().then(() => {
